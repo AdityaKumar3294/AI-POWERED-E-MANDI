@@ -13,17 +13,17 @@ The model is intended for the AI-Powered E-Mandi tomato quality assessment pipel
 
 ## 2. Training Configuration
 
-| Parameter | Value |
-|---|---|
-| Model | YOLO11n |
-| Task | Object Detection |
-| Number of Classes | 2 |
-| Image Size | 640 × 640 |
-| Epochs | 50 |
-| Batch Size | 8 |
-| Hardware | NVIDIA RTX 3050 Laptop GPU |
-| Training Framework | Ultralytics YOLO |
-| Dataset Split | Train / Validation / Test |
+| Parameter          | Value |
+|--------------------|----------------------------|
+| Model              | YOLO11n                    |
+| Task               | Object Detection           |
+| Number of Classes  | 2                          |
+| Image Size         | 640 × 640                  |
+| Epochs             | 50                         |
+| Batch Size         | 8                          |
+| Hardware           | NVIDIA RTX 3050 Laptop GPU |
+| Training Framework | Ultralytics YOLO           |
+| Dataset Split      | Train / Validation / Test  |
 
 ---
 
@@ -66,6 +66,11 @@ The following types of images were checked:
 - Different tomato arrangements
 
 The detections on the sampled test images were visually checked and appeared correct.
+```
+
+---
+
+
 ## 6. External Image Testing
 
 The model was additionally tested on images obtained from outside the original dataset.
@@ -82,6 +87,7 @@ Observed issues included:
 - Lowering the confidence threshold too much produced false-positive detections.
 
 These results indicate areas for future model improvement.
+
 ## 7. Current Model Limitations
 
 The current v1 model has the following known limitations:
@@ -92,6 +98,7 @@ The current v1 model has the following known limitations:
 4. Very low confidence thresholds can introduce false-positive detections.
 
 These limitations were observed during external stress testing and do not invalidate the formal held-out test-set results.
+
 ## 8. Current Model Status
 
 **Status: v1 baseline complete**
