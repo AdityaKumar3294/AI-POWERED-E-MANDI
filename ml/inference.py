@@ -1,19 +1,19 @@
 from ultralytics import YOLO
 
 
-# Path to our trained YOLO model
+# Path to the trained YOLO model
 MODEL_PATH = r"runs\detect\train-3\weights\best.pt"
 
 # Load the trained model
 model = YOLO(MODEL_PATH)
 
 
-def predict_image(image_path):
+def predict_image(image_path, conf=0.25, verbose=False):
     results = model.predict(
         source=image_path,
         imgsz=640,
-        conf=0.25,
-        verbose=False
+        conf=conf,
+        verbose=verbose
     )
 
     result = results[0]
@@ -43,12 +43,13 @@ def predict_image(image_path):
         height = y2 - y1
         area = width * height
 
-        print(
-            f"Class: {label}, "
-            f"Width: {width:.1f}, "
-            f"Height: {height:.1f}, "
-            f"Area: {area:.1f}"
-        )
+        if verbose:
+            print(
+                f"Class: {label}, "
+                f"Width: {width:.1f}, "
+                f"Height: {height:.1f}, "
+                f"Area: {area:.1f}"
+            )
 
         detections.append({
             "class": label,
