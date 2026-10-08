@@ -3,6 +3,8 @@ const cors = require("cors");
 
 const authRoutes = require("./routes/authRoutes");
 const productRoutes = require("./routes/productRoutes");
+const gradingRoutes = require("./routes/gradingRoutes");
+const certificateRoutes = require("./routes/certificateRoutes");
 
 const app = express();
 
@@ -20,8 +22,9 @@ app.get("/api/health", (req, res) => {
 
 // Authentication routes
 app.use("/api/auth", authRoutes);
-
 // Product routes
 app.use("/api/products", productRoutes);
+app.use("/api/grading", gradingRoutes);
+app.use("/api/certificates", certificateRoutes);
 
 module.exports = app;
