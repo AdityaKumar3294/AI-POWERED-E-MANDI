@@ -1,10 +1,10 @@
 
 from pathlib import Path
+from io import BytesIO
 
-from fastapi import FastAPI, File, HTTPException, UploadFile
+from fastapi import FastAPI, File, HTTPException, UploadFile, Query
 from ultralytics import YOLO
 from PIL import Image, UnidentifiedImageError
-from io import BytesIO
 
 app = FastAPI(title="AI E-Mandi AI Service")
 
@@ -27,7 +27,10 @@ def health():
 
 
 @app.post("/predict")
-async def predict(file: UploadFile = File(...)):
+async def predict(
+    file: UploadFile = File(...),
+    conf: float = Query(default=0.4, ge=0.0, le=1.0)
+):
     if file.content_type not in ("image/jpeg", "image/png", "image/webp"):
         raise HTTPException(
             status_code=400,
@@ -50,7 +53,12 @@ async def predict(file: UploadFile = File(...)):
             detail="The uploaded file is not a valid image."
         )
 
-    results = model.predict(image, verbose=False)
+    results = model.predict(
+        image,
+        conf=conf,
+        iou=0.45,
+        verbose=False
+    )
     result = results[0]
 
     detections = []
@@ -71,6 +79,7 @@ async def predict(file: UploadFile = File(...)):
 
     return {
         "filename": file.filename,
+        "confidence_threshold": conf,
         "detections_count": len(detections),
         "detections": detections
     }
