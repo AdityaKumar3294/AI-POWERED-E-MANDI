@@ -1,0 +1,30 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+
+# Environment / secrets
+.env
+.env.*
+
+# YOLO training outputs
+runs/
+weights/
+
+# YOLO pretrained model
+*.pt
+
+# YOLO cache files
+*.cache
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Large/raw datasets
+ml/datasets/raw/
+ml/datasets/*/images/
+ml/datasets/*/labels/
+
+# Python generated files
+*.log

@@ -1,7 +1,5 @@
-﻿from pathlib import Path
-
+from pathlib import Path
 from ultralytics import YOLO
-
 
 # Locate the existing trained model in ai-service
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
@@ -15,25 +13,25 @@ model = YOLO(str(MODEL_PATH))
 
 def predict_image(image_path, conf=0.25, verbose=False):
     image_path = Path(image_path)
-
+    
     if not image_path.is_file():
         raise FileNotFoundError(f"Input image not found: {image_path}")
-
+        
     results = model.predict(
         source=str(image_path),
         imgsz=640,
         conf=conf,
         verbose=verbose
     )
-
+    
     result = results[0]
     fresh_count = 0
     rotten_count = 0
     detections = []
 
     for box in result.boxes:
-        class_id = int(box.cls[0].item())
-        confidence = float(box.conf[0].item())
+        class_id = int(box.cls[0])
+        confidence = float(box.conf[0])
 
         if class_id == 0:
             label = "Fresh Tomato"
@@ -52,28 +50,3 @@ def predict_image(image_path, conf=0.25, verbose=False):
                 f"Width: {x2 - x1:.1f}, Height: {y2 - y1:.1f}, "
                 f"Area: {(x2 - x1) * (y2 - y1):.1f}"
             )
-
-        detections.append({
-            "class": label,
-            "confidence": round(confidence, 2),
-            "box": [round(v, 2) for v in (x1, y1, x2, y2)]
-        })
-
-    total_count = fresh_count + rotten_count
-    defect_percentage = (
-        (rotten_count / total_count) * 100 if total_count else 0.0
-    )
-
-    return {
-        "total_count": total_count,
-        "fresh_count": fresh_count,
-        "rotten_count": rotten_count,
-        "defect_percentage": round(defect_percentage, 2),
-        "detections": detections
-    }
-
-
-if __name__ == "__main__":
-    print(f"Model loaded successfully: {MODEL_PATH}")
-    print(f"Classes: {model.names}")
-    print("Pass an existing image path to predict_image() to run detection.")
