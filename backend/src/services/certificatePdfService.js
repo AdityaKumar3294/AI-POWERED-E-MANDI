@@ -1,0 +1,213 @@
+
+const PDFDocument = require("pdfkit");
+const { generateCertificateQR } = require("./qrService");
+
+const generateCertificatePDF = async (certificate) => {
+  const qr = await generateCertificateQR(certificate.certificateId);
+
+  const qrBase64 = qr.qrCodeDataUrl.replace(
+    /^data:image\/png;base64,/,
+    ""
+  );
+
+  const qrBuffer = Buffer.from(qrBase64, "base64");
+
+  return new Promise((resolve, reject) => {
+    const doc = new PDFDocument({
+      size: "A4",
+      margin: 45,
+      bufferPages: true,
+    });
+
+    const chunks = [];
+
+    doc.on("data", (chunk) => chunks.push(chunk));
+    doc.on("end", () => resolve(Buffer.concat(chunks)));
+    doc.on("error", reject);
+
+    const pageWidth = doc.page.width;
+    const left = 45;
+    const right = pageWidth - 45;
+
+    // Page border
+    doc
+      .lineWidth(2)
+      .strokeColor("#247447")
+      .rect(25, 25, pageWidth - 50, doc.page.height - 50)
+      .stroke();
+
+    // Header
+    doc
+      .fillColor("#247447")
+      .font("Helvetica-Bold")
+      .fontSize(23)
+      .text("AI POWERED E-MANDI", left, 55, {
+        align: "center",
+      });
+
+    doc
+      .fillColor("#333333")
+      .font("Helvetica-Bold")
+      .fontSize(17)
+      .text("PRODUCE QUALITY CERTIFICATE", left, 92, {
+        align: "center",
+      });
+
+    doc
+      .font("Helvetica")
+      .fontSize(9)
+      .fillColor("#666666")
+      .text("Digital certificate of AI-assisted produce quality assessment", {
+        align: "center",
+      });
+
+    // Grade badge
+    doc
+      .roundedRect(205, 145, 140, 65, 10)
+      .fill("#E8F5EC");
+
+    doc
+      .fillColor("#247447")
+      .font("Helvetica-Bold")
+      .fontSize(11)
+      .text("QUALITY GRADE", 205, 155, {
+        width: 140,
+        align: "center",
+      });
+
+    doc
+      .fontSize(27)
+      .text(String(certificate.grade || "N/A"), 205, 169, {
+        width: 140,
+        align: "center",
+      });
+
+    // Certificate details
+    const sectionY = 235;
+
+    doc
+      .fillColor("#247447")
+      .font("Helvetica-Bold")
+      .fontSize(13)
+      .text("CERTIFICATE DETAILS", left, sectionY);
+
+    doc
+      .moveTo(left, sectionY + 20)
+      .lineTo(right, sectionY + 20)
+      .strokeColor("#247447")
+      .lineWidth(1)
+      .stroke();
+
+    const details = [
+      ["Certificate ID", certificate.certificateId],
+      ["Produce", certificate.produceName || "N/A"],
+      ["Farmer", certificate.farmerId?.name || "N/A"],
+      ["Location", certificate.farmerId?.location || "N/A"],
+      ["Total detected", String(certificate.totalProduce ?? 0)],
+      ["Healthy detected", String(certificate.healthyProduce ?? 0)],
+      ["Defective detected", String(certificate.defectiveProduce ?? 0)],
+      [
+        "Defect percentage",
+        `${certificate.defectPercentage ?? 0}%`,
+      ],
+      ["Average size", certificate.averageSize || "Unknown"],
+      [
+        "Issue date",
+        certificate.issuedAt
+          ? new Date(certificate.issuedAt).toLocaleDateString("en-IN", {
+              day: "2-digit",
+              month: "long",
+              year: "numeric",
+              timeZone: "Asia/Kolkata",
+            })
+          : "N/A",
+      ],
+      ["Status", certificate.valid ? "VALID" : "INVALID"],
+    ];
+
+    let y = sectionY + 35;
+
+    details.forEach(([label, value]) => {
+      doc
+        .fillColor("#555555")
+        .font("Helvetica")
+        .fontSize(10)
+        .text(label, left + 5, y, { width: 150 });
+
+      doc
+        .fillColor("#222222")
+        .font("Helvetica-Bold")
+        .fontSize(10)
+        .text(value, left + 165, y, {
+          width: 260,
+        });
+
+      y += 25;
+    });
+
+    // QR code
+    const qrY = y + 5;
+
+    doc.image(qrBuffer, right - 115, qrY, {
+      fit: [105, 105],
+      align: "center",
+    });
+
+    doc
+      .fillColor("#247447")
+      .font("Helvetica-Bold")
+      .fontSize(9)
+      .text("SCAN TO VERIFY", right - 130, qrY + 110, {
+        width: 135,
+        align: "center",
+      });
+
+    doc
+      .fillColor("#555555")
+      .font("Helvetica")
+      .fontSize(8)
+      .text(
+        "Scan the QR code to check this certificate against the online verification record.",
+        left,
+        qrY + 10,
+        { width: 270, lineGap: 4 }
+      );
+
+    // Disclaimer
+    const footerY = doc.page.height - 105;
+
+    doc
+      .moveTo(left, footerY)
+      .lineTo(right, footerY)
+      .strokeColor("#CCCCCC")
+      .lineWidth(1)
+      .stroke();
+
+    doc
+      .fillColor("#666666")
+      .font("Helvetica")
+      .fontSize(8)
+      .text(
+        "This document records the results returned by the AI-assisted grading system. " +
+          "It is not an official government or AGMARK certificate.",
+        left,
+        footerY + 10,
+        {
+          width: right - left,
+          align: "center",
+          lineGap: 3,
+        }
+      );
+
+    doc
+      .fontSize(8)
+      .text("Generated by AI Powered E-Mandi", left, footerY + 45, {
+        width: right - left,
+        align: "center",
+      });
+
+    doc.end();
+  });
+};
+
+module.exports = { generateCertificatePDF };

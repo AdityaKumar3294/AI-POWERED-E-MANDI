@@ -1,18 +1,20 @@
 const express = require("express");
-
-const {
-  createCertificate,
-} = require("../controllers/certificateController");
+const router = express.Router();
 
 const protect = require("../middleware/authMiddleware");
 
-const router = express.Router();
+const {
+  createCertificate,
+  getMyCertificates,
+  getCertificateById,
+  verifyCertificate,
+  downloadCertificatePDF,
+} = require("../controllers/certificateController");
 
-// Create digital certificate from grading report
-router.post(
-  "/",
-  protect,
-  createCertificate
-);
+router.post("/", protect, createCertificate);
+router.get("/", protect, getMyCertificates);
+router.get("/verify/:certificateId", verifyCertificate);
+router.get("/:id/pdf", protect, downloadCertificatePDF);
+router.get("/:id", protect, getCertificateById);
 
 module.exports = router;
