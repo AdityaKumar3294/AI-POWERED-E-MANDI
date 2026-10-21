@@ -9,6 +9,14 @@ const orderRoutes = require("./routes/orderRoutes");
 
 const app = express();
 
+app.get("/", (req, res) => {
+  res.status(200).json({
+    success: true,
+    message: "AI Powered E-Mandi API is running",
+    status: "OK",
+  });
+});
+
 app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));

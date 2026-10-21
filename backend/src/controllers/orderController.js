@@ -1,25 +1,33 @@
+
+const mongoose = require("mongoose");
 const Order = require("../models/Order");
 const Product = require("../models/Product");
 
+const ORDER_STATUSES = [
+  "pending",
+  "confirmed",
+  "rejected",
+  "completed",
+  "cancelled",
+];
+
+const isValidObjectId = (id) =>
+  mongoose.Types.ObjectId.isValid(id);
+
+const isPositiveNumber = (value) =>
+  value !== "" &&
+  value !== null &&
+  value !== undefined &&
+  Number.isFinite(Number(value)) &&
+  Number(value) >= 1;
+
 // CREATE ORDER
 const createOrder = async (req, res) => {
+  let reservedProductId = null;
+  let reservedQuantity = 0;
+
   try {
     const { productId, quantity, deliveryAddress } = req.body;
-
-    // Validate input
-    if (!productId || !quantity || !deliveryAddress) {
-      return res.status(400).json({
-        success: false,
-        message: "Product ID, quantity and delivery address are required",
-      });
-    }
-
-    if (quantity <= 0) {
-      return res.status(400).json({
-        success: false,
-        message: "Quantity must be greater than 0",
-      });
-    }
 
     // Only buyers can place orders
     if (req.user.role !== "buyer") {
@@ -29,57 +37,100 @@ const createOrder = async (req, res) => {
       });
     }
 
-    // Find product
-    const product = await Product.findById(productId);
+    // Validate required fields
+    if (
+      !productId ||
+      quantity === undefined ||
+      typeof deliveryAddress !== "string" ||
+      !deliveryAddress.trim()
+    ) {
+      return res.status(400).json({
+        success: false,
+        message:
+          "Product ID, quantity and delivery address are required",
+      });
+    }
+
+    if (!isValidObjectId(productId)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid product ID",
+      });
+    }
+
+    if (!isPositiveNumber(quantity)) {
+      return res.status(400).json({
+        success: false,
+        message: "Quantity must be a number greater than or equal to 1",
+      });
+    }
+
+    const requestedQuantity = Number(quantity);
+
+    // Atomically reserve stock so simultaneous orders cannot
+    // reserve the same available quantity.
+    const product = await Product.findOneAndUpdate(
+      {
+        _id: productId,
+        status: "available",
+        quantity: { $gte: requestedQuantity },
+      },
+      {
+        $inc: { quantity: -requestedQuantity },
+      },
+      { new: true }
+    );
 
     if (!product) {
-      return res.status(404).json({
-        success: false,
-        message: "Product not found",
-      });
-    }
+      const existingProduct = await Product.findById(productId);
 
-    // Check product availability
-    if (product.status !== "available") {
+      if (!existingProduct) {
+        return res.status(404).json({
+          success: false,
+          message: "Product not found",
+        });
+      }
+
+      if (existingProduct.status !== "available") {
+        return res.status(400).json({
+          success: false,
+          message: "This product is not available",
+        });
+      }
+
       return res.status(400).json({
         success: false,
-        message: "This product is not available",
+        message: `Only ${existingProduct.quantity} kg is available`,
       });
     }
 
-    // Check requested quantity
-    if (quantity > product.quantity) {
-      return res.status(400).json({
-        success: false,
-        message: `Only ${product.quantity} kg is available`,
-      });
-    }
+    reservedProductId = product._id;
+    reservedQuantity = requestedQuantity;
 
-    // Calculate total on backend
-    const totalAmount = quantity * product.pricePerKg;
-
-    // Reserve product stock
-    product.quantity -= quantity;
-
+    // Mark product sold out when all stock is reserved
     if (product.quantity === 0) {
       product.status = "sold_out";
+      await product.save();
     }
 
-    await product.save();
+    const totalAmount = requestedQuantity * product.pricePerKg;
 
-    // Create order
     const order = await Order.create({
       buyerId: req.user.userId,
       farmerId: product.farmerId,
       productId: product._id,
-      quantity,
+      quantity: requestedQuantity,
       pricePerKg: product.pricePerKg,
       totalAmount,
-      deliveryAddress,
+      deliveryAddress: deliveryAddress.trim(),
       status: "pending",
     });
 
-    res.status(201).json({
+    // Order saved successfully; no rollback needed
+    reservedProductId = null;
+    reservedQuantity = 0;
+
+    return res.status(201).json({
       success: true,
       message: "Order placed successfully",
       order,
@@ -87,23 +138,53 @@ const createOrder = async (req, res) => {
   } catch (error) {
     console.error("Create order error:", error);
 
-    res.status(500).json({
+    // Restore reserved stock if order creation failed.
+    // This is a compensating rollback, not a database transaction.
+    if (reservedProductId && reservedQuantity > 0) {
+      try {
+        await Product.updateOne(
+        {
+          _id: reservedProductId,
+          status: { $ne: "inactive" },
+        },
+        {
+          $inc: { quantity: reservedQuantity },
+          $set: { status: "available" },
+        }
+      );
+      } catch (rollbackError) {
+        console.error("Stock rollback error:", rollbackError);
+      }
+    }
+
+    if (error.name === "ValidationError") {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+
+    return res.status(500).json({
       success: false,
       message: "Server error while creating order",
     });
   }
 };
 
-
 // GET MY ORDERS
 const getMyOrders = async (req, res) => {
   try {
-    let filter = {};
+    let filter;
 
     if (req.user.role === "buyer") {
-      filter.buyerId = req.user.userId;
+      filter = { buyerId: req.user.userId };
     } else if (req.user.role === "farmer") {
-      filter.farmerId = req.user.userId;
+      filter = { farmerId: req.user.userId };
+    } else {
+      return res.status(403).json({
+        success: false,
+        message: "You are not authorized to view these orders",
+      });
     }
 
     const orders = await Order.find(filter)
@@ -112,7 +193,7 @@ const getMyOrders = async (req, res) => {
       .populate("productId", "name grade pricePerKg")
       .sort({ createdAt: -1 });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       count: orders.length,
       orders,
@@ -120,18 +201,26 @@ const getMyOrders = async (req, res) => {
   } catch (error) {
     console.error("Get orders error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Server error while fetching orders",
     });
   }
 };
 
-
 // GET SINGLE ORDER
 const getOrderById = async (req, res) => {
   try {
-    const order = await Order.findById(req.params.id)
+    const { id } = req.params;
+
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid order ID",
+      });
+    }
+
+    const order = await Order.findById(id)
       .populate("buyerId", "name email location")
       .populate("farmerId", "name email location")
       .populate("productId", "name grade pricePerKg");
@@ -143,125 +232,138 @@ const getOrderById = async (req, res) => {
       });
     }
 
-    // Only buyer or farmer involved in the order can view it
+    const buyerId = order.buyerId?._id?.toString();
+    const farmerId = order.farmerId?._id?.toString();
     const userId = req.user.userId;
 
-    if (
-      order.buyerId._id.toString() !== userId &&
-      order.farmerId._id.toString() !== userId
-    ) {
+    if (buyerId !== userId && farmerId !== userId) {
       return res.status(403).json({
         success: false,
         message: "You are not authorized to view this order",
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       order,
     });
   } catch (error) {
     console.error("Get order error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Server error while fetching order",
     });
   }
 };
 
-
 // UPDATE ORDER STATUS
+
 const updateOrderStatus = async (req, res) => {
+  const session = await mongoose.startSession();
+
   try {
+    const { id } = req.params;
     const { status } = req.body;
 
-    const allowedStatuses = [
-      "confirmed",
-      "rejected",
-      "completed",
-      "cancelled",
-    ];
+    const fail = (statusCode, message) => {
+      const error = new Error(message);
+      error.statusCode = statusCode;
+      throw error;
+    };
 
-    if (!allowedStatuses.includes(status)) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid order status",
-      });
+    if (!isValidObjectId(id)) {
+      fail(400, "Invalid order ID");
     }
 
-    const order = await Order.findById(req.params.id);
-
-    if (!order) {
-      return res.status(404).json({
-        success: false,
-        message: "Order not found",
-      });
+    if (!ORDER_STATUSES.includes(status)) {
+      fail(400, "Invalid order status");
     }
 
     const userId = req.user.userId;
+    let updatedOrder;
 
-    // Farmer can confirm/reject/complete
-    if (order.farmerId.toString() === userId) {
-      if (!["confirmed", "rejected", "completed"].includes(status)) {
-        return res.status(403).json({
-          success: false,
-          message: "Farmer cannot set this status",
-        });
+    await session.withTransaction(async () => {
+      const order = await Order.findById(id).session(session);
+
+      if (!order) {
+        fail(404, "Order not found");
       }
-    }
 
-    // Buyer can cancel
-    else if (order.buyerId.toString() === userId) {
-      if (status !== "cancelled") {
-        return res.status(403).json({
-          success: false,
-          message: "Buyer can only cancel an order",
-        });
+      const isFarmer = order.farmerId.toString() === userId;
+      const isBuyer = order.buyerId.toString() === userId;
+
+      if (!isFarmer && !isBuyer) {
+        fail(403, "You are not authorized to update this order");
       }
-    }
 
-    // Nobody else can update
-    else {
-      return res.status(403).json({
-        success: false,
-        message: "You are not authorized to update this order",
-      });
-    }
+      if (
+        isFarmer &&
+        !["confirmed", "rejected", "completed"].includes(status)
+      ) {
+        fail(403, "Farmer cannot set this status");
+      }
 
-    if (
-      (status === "rejected" || status === "cancelled") &&
-      order.status === "pending"
-    ) {
-      const product = await Product.findById(order.productId);
+      if (isBuyer && status !== "cancelled") {
+        fail(403, "Buyer can only cancel an order");
+      }
 
-      if (product) {
-        product.quantity += order.quantity;
+      // Define permitted transitions.
+      const allowedTransitions = {
+        pending: ["confirmed", "rejected", "cancelled"],
+        confirmed: ["completed"],
+        rejected: [],
+        completed: [],
+        cancelled: [],
+      };
 
-        if (product.status === "sold_out" && product.quantity > 0) {
-          product.status = "available";
+      if (!allowedTransitions[order.status]?.includes(status)) {
+        fail(
+          400,
+          `Cannot change order status from ${order.status} to ${status}`
+        );
+      }
+
+      // Restore stock only when a pending order is rejected or cancelled.
+      if (["rejected", "cancelled"].includes(status)) {
+        const product = await Product.findById(order.productId)
+          .session(session);
+
+        if (product) {
+          product.quantity += order.quantity;
+
+          // Do not reactivate products that were deliberately made inactive.
+          if (product.status === "sold_out" && product.quantity > 0) {
+            product.status = "available";
+          }
+
+          await product.save({ session });
         }
-
-        await product.save();
       }
-    }
 
-    order.status = status;
+      order.status = status;
+      await order.save({ session });
 
-    await order.save();
+      updatedOrder = order;
+    });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Order status updated successfully",
-      order,
+      order: updatedOrder,
     });
   } catch (error) {
     console.error("Update order status error:", error);
 
-    res.status(500).json({
+    return res.status(error.statusCode || 500).json({
       success: false,
-      message: "Server error while updating order status",
+      message:
+        error.statusCode
+          ? error.message
+          : "Server error while updating order status",
     });
+  } finally {
+    await session.endSession();
   }
 };
 

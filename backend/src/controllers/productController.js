@@ -1,4 +1,26 @@
+
+const mongoose = require("mongoose");
 const Product = require("../models/Product");
+
+// Allowed product grades and statuses
+const ALLOWED_GRADES = ["A", "B", "C"];
+const ALLOWED_STATUSES = ["available", "sold", "unavailable"];
+
+// Helper: Validate MongoDB ObjectId
+const isValidObjectId = (id) => {
+  return mongoose.Types.ObjectId.isValid(id);
+};
+
+// Helper: Validate positive numbers
+const isPositiveNumber = (value) => {
+  return (
+    value !== "" &&
+    value !== null &&
+    value !== undefined &&
+    Number.isFinite(Number(value)) &&
+    Number(value) > 0
+  );
+};
 
 // CREATE PRODUCT
 const createProduct = async (req, res) => {
@@ -21,25 +43,78 @@ const createProduct = async (req, res) => {
     } = req.body;
 
     // Validate required fields
-    if (!name || !quantity || !pricePerKg || !grade) {
+    if (
+      typeof name !== "string" ||
+      !name.trim() ||
+      quantity === undefined ||
+      pricePerKg === undefined ||
+      !grade
+    ) {
       return res.status(400).json({
         success: false,
-        message: "Name, quantity, pricePerKg and grade are required",
+        message:
+          "Name, quantity, pricePerKg and grade are required",
       });
     }
 
-    // Create product using logged-in farmer's ID
+    // Validate quantity
+    if (!isPositiveNumber(quantity)) {
+      return res.status(400).json({
+        success: false,
+        message: "Quantity must be a number greater than zero",
+      });
+    }
+
+    // Validate price
+    if (!isPositiveNumber(pricePerKg)) {
+      return res.status(400).json({
+        success: false,
+        message: "Price per kg must be a number greater than zero",
+      });
+    }
+
+    // Validate grade
+    if (!ALLOWED_GRADES.includes(grade)) {
+      return res.status(400).json({
+        success: false,
+        message: "Grade must be A, B, or C",
+      });
+    }
+
+    // Validate optional certificate ID
+    if (
+      certificateId &&
+      !isValidObjectId(certificateId)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid certificate ID",
+      });
+    }
+
+    // Validate optional grading report ID
+    if (
+      gradingReportId &&
+      !isValidObjectId(gradingReportId)
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid grading report ID",
+      });
+    }
+
+    // Create product using the logged-in farmer's ID
     const product = await Product.create({
       farmerId: req.user.userId,
-      name,
-      quantity,
-      pricePerKg,
+      name: name.trim(),
+      quantity: Number(quantity),
+      pricePerKg: Number(pricePerKg),
       grade,
       certificateId: certificateId || null,
       gradingReportId: gradingReportId || null,
     });
 
-    res.status(201).json({
+    return res.status(201).json({
       success: true,
       message: "Product listed successfully",
       product,
@@ -47,13 +122,20 @@ const createProduct = async (req, res) => {
   } catch (error) {
     console.error("Create product error:", error);
 
-    res.status(500).json({
+    // Handle Mongoose validation errors
+    if (error.name === "ValidationError") {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+
+    return res.status(500).json({
       success: false,
       message: "Server error while creating product",
     });
   }
 };
-
 
 // GET ALL AVAILABLE PRODUCTS
 const getProducts = async (req, res) => {
@@ -64,7 +146,7 @@ const getProducts = async (req, res) => {
       .populate("farmerId", "name location")
       .sort({ createdAt: -1 });
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       count: products.length,
       products,
@@ -72,7 +154,7 @@ const getProducts = async (req, res) => {
   } catch (error) {
     console.error("Get products error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Server error while fetching products",
     });
@@ -82,8 +164,20 @@ const getProducts = async (req, res) => {
 // GET SINGLE PRODUCT
 const getProductById = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id)
-      .populate("farmerId", "name location");
+    const { id } = req.params;
+
+    // Validate product ID before querying MongoDB
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid product ID",
+      });
+    }
+
+    const product = await Product.findById(id).populate(
+      "farmerId",
+      "name location"
+    );
 
     if (!product) {
       return res.status(404).json({
@@ -92,14 +186,14 @@ const getProductById = async (req, res) => {
       });
     }
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       product,
     });
   } catch (error) {
     console.error("Get product error:", error);
 
-    res.status(500).json({
+    return res.status(500).json({
       success: false,
       message: "Server error while fetching product",
     });
@@ -109,7 +203,17 @@ const getProductById = async (req, res) => {
 // UPDATE PRODUCT
 const updateProduct = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const { id } = req.params;
+
+    // Validate product ID
+    if (!isValidObjectId(id)) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid product ID",
+      });
+    }
+
+    const product = await Product.findById(id);
 
     if (!product) {
       return res.status(404).json({
@@ -134,15 +238,90 @@ const updateProduct = async (req, res) => {
       status,
     } = req.body;
 
-    if (name !== undefined) product.name = name;
-    if (quantity !== undefined) product.quantity = quantity;
-    if (pricePerKg !== undefined) product.pricePerKg = pricePerKg;
-    if (grade !== undefined) product.grade = grade;
-    if (status !== undefined) product.status = status;
+    // Prevent empty update requests
+    const allowedFields = [
+      "name",
+      "quantity",
+      "pricePerKg",
+      "grade",
+      "status",
+    ];
+
+    const suppliedFields = allowedFields.filter(
+      (field) => req.body[field] !== undefined
+    );
+
+    if (suppliedFields.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Provide at least one field to update",
+      });
+    }
+
+    // Validate product name
+    if (name !== undefined) {
+      if (typeof name !== "string" || !name.trim()) {
+        return res.status(400).json({
+          success: false,
+          message: "Product name must be a non-empty string",
+        });
+      }
+
+      product.name = name.trim();
+    }
+
+    // Validate quantity
+    if (quantity !== undefined) {
+      if (!isPositiveNumber(quantity)) {
+        return res.status(400).json({
+          success: false,
+          message: "Quantity must be a number greater than zero",
+        });
+      }
+
+      product.quantity = Number(quantity);
+    }
+
+    // Validate price
+    if (pricePerKg !== undefined) {
+      if (!isPositiveNumber(pricePerKg)) {
+        return res.status(400).json({
+          success: false,
+          message: "Price per kg must be a number greater than zero",
+        });
+      }
+
+      product.pricePerKg = Number(pricePerKg);
+    }
+
+    // Validate grade
+    if (grade !== undefined) {
+      if (!ALLOWED_GRADES.includes(grade)) {
+        return res.status(400).json({
+          success: false,
+          message: "Grade must be A, B, or C",
+        });
+      }
+
+      product.grade = grade;
+    }
+
+    // Validate status
+    if (status !== undefined) {
+      if (!ALLOWED_STATUSES.includes(status)) {
+        return res.status(400).json({
+          success: false,
+          message:
+            "Status must be available, sold, or unavailable",
+        });
+      }
+
+      product.status = status;
+    }
 
     await product.save();
 
-    res.status(200).json({
+    return res.status(200).json({
       success: true,
       message: "Product updated successfully",
       product,
@@ -150,13 +329,19 @@ const updateProduct = async (req, res) => {
   } catch (error) {
     console.error("Update product error:", error);
 
-    res.status(500).json({
+    if (error.name === "ValidationError") {
+      return res.status(400).json({
+        success: false,
+        message: error.message,
+      });
+    }
+
+    return res.status(500).json({
       success: false,
       message: "Server error while updating product",
     });
   }
 };
-
 
 module.exports = {
   createProduct,
