@@ -1,0 +1,22 @@
+﻿PERSON B — YOLO MODEL VALIDATION REPORT
+
+Model: YOLO11n
+Weights: ai-service/models/best.pt
+Task: Object Detection
+Classes: Fresh Tomato, Rotten Tomato
+
+TEST DATASET RESULTS
+Test images: 774
+Fresh Tomato instances: 1315
+Rotten Tomato instances: 718
+Precision: 97.57%
+Recall: 96.51%
+mAP@50: 98.81%
+mAP@50-95: 95.35%
+
+REAL-WORLD TESTING
+Potato and onion images produced false Rotten Tomato detections.
+This limitation must be considered before real-world deployment.
+
+EVALUATION ARTIFACTS
+runs/detect/val-8/
