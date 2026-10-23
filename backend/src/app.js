@@ -6,6 +6,8 @@ const productRoutes = require("./routes/productRoutes");
 const gradingRoutes = require("./routes/gradingRoutes");
 const certificateRoutes = require("./routes/certificateRoutes");
 const orderRoutes = require("./routes/orderRoutes");
+const farmerDashboardRoutes = require("./routes/farmerDashboardRoutes");
+const buyerDashboardRoutes = require("./routes/buyerDashboardRoutes");
 
 const app = express();
 
@@ -22,6 +24,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // Serve uploaded product images
 app.use("/uploads", express.static("uploads"));
+app.use("/api/farmer/dashboard", farmerDashboardRoutes);
+app.use("/api/buyer/dashboard", buyerDashboardRoutes);
 
 // Health check
 app.get("/api/health", (req, res) => {

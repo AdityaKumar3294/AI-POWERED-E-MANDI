@@ -214,11 +214,112 @@ const createProduct = async (req, res) => {
 };
 
 // GET ALL AVAILABLE PRODUCTS
+
 const getProducts = async (req, res) => {
   try {
-    const products = await Product.find({
+    const {
+      search,
+      grade,
+      minPrice,
+      maxPrice,
+      sortBy,
+      order,
+    } = req.query;
+
+    const filter = {
       status: "available",
-    })
+      quantity: { $gt: 0 },
+    };
+
+    // Search product names safely.
+    if (typeof search === "string" && search.trim()) {
+      const escapedSearch = search.trim().replace(
+        /[.*+?^${}()|[\]\\]/g,
+        "\\$&"
+      );
+
+      filter.name = {
+        $regex: escapedSearch,
+        $options: "i",
+      };
+    }
+
+    // Filter by grade.
+    if (grade !== undefined) {
+      if (!["A", "B", "C"].includes(grade)) {
+        return res.status(400).json({
+          success: false,
+          message: "Grade must be A, B, or C",
+        });
+      }
+
+      filter.grade = grade;
+    }
+
+    // Filter by minimum price.
+    if (minPrice !== undefined) {
+      if (
+        minPrice === "" ||
+        !Number.isFinite(Number(minPrice)) ||
+        Number(minPrice) < 0
+      ) {
+        return res.status(400).json({
+          success: false,
+          message: "minPrice must be a non-negative number",
+        });
+      }
+
+      filter.pricePerKg = {
+        ...filter.pricePerKg,
+        $gte: Number(minPrice),
+      };
+    }
+
+    // Filter by maximum price.
+    if (maxPrice !== undefined) {
+      if (
+        maxPrice === "" ||
+        !Number.isFinite(Number(maxPrice)) ||
+        Number(maxPrice) < 0
+      ) {
+        return res.status(400).json({
+          success: false,
+          message: "maxPrice must be a non-negative number",
+        });
+      }
+
+      filter.pricePerKg = {
+        ...filter.pricePerKg,
+        $lte: Number(maxPrice),
+      };
+    }
+
+    if (
+      filter.pricePerKg?.$gte !== undefined &&
+      filter.pricePerKg?.$lte !== undefined &&
+      filter.pricePerKg.$gte > filter.pricePerKg.$lte
+    ) {
+      return res.status(400).json({
+        success: false,
+        message: "minPrice cannot be greater than maxPrice",
+      });
+    }
+
+    // Allow only supported sort fields.
+    const allowedSortFields = [
+      "createdAt",
+      "pricePerKg",
+      "name",
+      "quantity",
+    ];
+
+    const selectedSort = allowedSortFields.includes(sortBy)
+      ? sortBy
+      : "createdAt";
+
+    const sortDirection = order === "asc" ? 1 : -1;
+
+    const products = await Product.find(filter)
       .populate("farmerId", "name location")
       .populate(
         "certificateId",
@@ -228,7 +329,7 @@ const getProducts = async (req, res) => {
         "gradingReportId",
         "total healthy defective defectPercentage averageSize grade"
       )
-      .sort({ createdAt: -1 });
+      .sort({ [selectedSort]: sortDirection });
 
     return res.status(200).json({
       success: true,
@@ -244,6 +345,7 @@ const getProducts = async (req, res) => {
     });
   }
 };
+
 
 // GET FARMER'S OWN PRODUCTS
 const getMyProducts = async (req, res) => {
