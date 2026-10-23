@@ -23,23 +23,35 @@ const storage = multer.diskStorage({
   },
 });
 
+
 const fileFilter = (req, file, cb) => {
+  console.log("Uploaded filename:", file.originalname);
+  console.log("Uploaded MIME type:", file.mimetype);
+
   const allowedTypes = [
     "image/jpeg",
-    "image/jpg",
     "image/png",
     "image/webp",
   ];
 
-  if (allowedTypes.includes(file.mimetype)) {
-    cb(null, true);
-  } else {
-    cb(
-      new Error("Only JPG, JPEG, PNG and WEBP images are allowed"),
-      false
-    );
+  const extension = path.extname(file.originalname).toLowerCase();
+  const allowedExtensions = [".jpg", ".jpeg", ".png", ".webp"];
+
+  if (
+    allowedTypes.includes(file.mimetype) &&
+    allowedExtensions.includes(extension)
+  ) {
+    return cb(null, true);
   }
+
+  return cb(
+    new Error(
+      `Invalid image type: ${file.mimetype}, extension: ${extension}`
+    ),
+    false
+  );
 };
+
 
 const upload = multer({
   storage,

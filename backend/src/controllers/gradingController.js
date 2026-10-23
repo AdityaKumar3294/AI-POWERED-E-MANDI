@@ -30,6 +30,7 @@ const analyzeGrading = async (req, res) => {
       defective: aiResult.defective,
       defectPercentage: aiResult.defectPercentage,
       averageSize: aiResult.averageSize || "unknown",
+      averageSizePixels: aiResult.averageSizePixels ?? null,
       grade: aiResult.grade,
       imageUrl: req.file.filename,
     });
@@ -44,6 +45,7 @@ const analyzeGrading = async (req, res) => {
         defective: report.defective,
         defectPercentage: report.defectPercentage,
         averageSize: report.averageSize,
+        averageSizePixels: report.averageSizePixels,
         grade: report.grade,
       },
     });

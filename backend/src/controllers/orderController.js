@@ -29,7 +29,7 @@ const createOrder = async (req, res) => {
   try {
     const { productId, quantity, deliveryAddress } = req.body;
 
-    // Only buyers can place orders
+    // Only buyers can place orders.
     if (req.user.role !== "buyer") {
       return res.status(403).json({
         success: false,
@@ -37,7 +37,7 @@ const createOrder = async (req, res) => {
       });
     }
 
-    // Validate required fields
+    // Validate required fields.
     if (
       !productId ||
       quantity === undefined ||
@@ -67,8 +67,7 @@ const createOrder = async (req, res) => {
 
     const requestedQuantity = Number(quantity);
 
-    // Atomically reserve stock so simultaneous orders cannot
-    // reserve the same available quantity.
+    // Atomically reserve stock to prevent overselling.
     const product = await Product.findOneAndUpdate(
       {
         _id: productId,
@@ -107,7 +106,7 @@ const createOrder = async (req, res) => {
     reservedProductId = product._id;
     reservedQuantity = requestedQuantity;
 
-    // Mark product sold out when all stock is reserved
+    // Mark the product sold out when no stock remains.
     if (product.quantity === 0) {
       product.status = "sold_out";
       await product.save();
@@ -126,7 +125,7 @@ const createOrder = async (req, res) => {
       status: "pending",
     });
 
-    // Order saved successfully; no rollback needed
+    // Order saved successfully; no rollback is needed.
     reservedProductId = null;
     reservedQuantity = 0;
 
@@ -139,19 +138,31 @@ const createOrder = async (req, res) => {
     console.error("Create order error:", error);
 
     // Restore reserved stock if order creation failed.
-    // This is a compensating rollback, not a database transaction.
+    // Preserve inactive status if the product was deactivated meanwhile.
     if (reservedProductId && reservedQuantity > 0) {
       try {
         await Product.updateOne(
-        {
-          _id: reservedProductId,
-          status: { $ne: "inactive" },
-        },
-        {
-          $inc: { quantity: reservedQuantity },
-          $set: { status: "available" },
-        }
-      );
+          { _id: reservedProductId },
+          [
+            {
+              $set: {
+                quantity: {
+                  $add: [
+                    { $ifNull: ["$quantity", 0] },
+                    reservedQuantity,
+                  ],
+                },
+                status: {
+                  $cond: [
+                    { $eq: ["$status", "inactive"] },
+                    "inactive",
+                    "available",
+                  ],
+                },
+              },
+            },
+          ]
+        );
       } catch (rollbackError) {
         console.error("Stock rollback error:", rollbackError);
       }
@@ -258,11 +269,12 @@ const getOrderById = async (req, res) => {
 };
 
 // UPDATE ORDER STATUS
-
 const updateOrderStatus = async (req, res) => {
-  const session = await mongoose.startSession();
+  let session;
 
   try {
+    session = await mongoose.startSession();
+
     const { id } = req.params;
     const { status } = req.body;
 
@@ -308,7 +320,7 @@ const updateOrderStatus = async (req, res) => {
         fail(403, "Buyer can only cancel an order");
       }
 
-      // Define permitted transitions.
+      // Only allow valid order-status transitions.
       const allowedTransitions = {
         pending: ["confirmed", "rejected", "cancelled"],
         confirmed: ["completed"],
@@ -324,7 +336,7 @@ const updateOrderStatus = async (req, res) => {
         );
       }
 
-      // Restore stock only when a pending order is rejected or cancelled.
+      // Rejected or cancelled pending orders return their reserved stock.
       if (["rejected", "cancelled"].includes(status)) {
         const product = await Product.findById(order.productId)
           .session(session);
@@ -332,8 +344,11 @@ const updateOrderStatus = async (req, res) => {
         if (product) {
           product.quantity += order.quantity;
 
-          // Do not reactivate products that were deliberately made inactive.
-          if (product.status === "sold_out" && product.quantity > 0) {
+          // Reactivate sold-out products, but never inactive products.
+          if (
+            product.status === "sold_out" &&
+            product.quantity > 0
+          ) {
             product.status = "available";
           }
 
@@ -357,16 +372,16 @@ const updateOrderStatus = async (req, res) => {
 
     return res.status(error.statusCode || 500).json({
       success: false,
-      message:
-        error.statusCode
-          ? error.message
-          : "Server error while updating order status",
+      message: error.statusCode
+        ? error.message
+        : "Server error while updating order status",
     });
   } finally {
-    await session.endSession();
+    if (session) {
+      await session.endSession();
+    }
   }
 };
-
 
 module.exports = {
   createOrder,

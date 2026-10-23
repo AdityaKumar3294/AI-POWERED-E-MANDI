@@ -33,11 +33,19 @@ const gradingReportSchema = new mongoose.Schema(
       max: 100,
     },
 
+    
     averageSize: {
       type: String,
       enum: ["small", "medium", "large", "unknown"],
       default: "unknown",
     },
+
+    averageSizePixels: {
+      type: Number,
+      min: 0,
+      default: null,
+    },
+
 
     grade: {
       type: String,
