@@ -1,20 +1,24 @@
 import { useState, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { Camera, Upload, RefreshCw, Award, History, ArrowRight } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { toast } from 'sonner';
 
 import { useAnalyzeGrading } from '../hooks';
 import { DetectionOverlay } from '../components/DetectionOverlay';
 import { GradingMetricsCard } from '../components/GradingMetricsCard';
 import { GenerateCertificateDialog } from '../components/GenerateCertificateDialog';
+import { CameraCaptureModal } from '@/components/CameraCaptureModal';
 import { compressImage } from '@/lib/image-compress';
 import { uploadUrl } from '@/lib/api';
 import type { GradingResult } from '@/types';
 
 export default function GradingPage() {
+  const { t } = useTranslation();
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
   const [isCompressing, setIsCompressing] = useState(false);
+  const [cameraModalOpen, setCameraModalOpen] = useState(false);
 
   // Analysis result state
   const [analysisResult, setAnalysisResult] = useState<{
@@ -30,10 +34,7 @@ export default function GradingPage() {
 
   const analyzeMutation = useAnalyzeGrading();
 
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
+  const processSelectedFile = async (file: File) => {
     if (!file.type.startsWith('image/')) {
       toast.error('Please select an image file (JPEG, PNG, or WEBP)');
       return;
@@ -52,6 +53,13 @@ export default function GradingPage() {
       toast.error('Failed to process image');
     } finally {
       setIsCompressing(false);
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      processSelectedFile(file);
     }
   };
 
@@ -97,10 +105,10 @@ export default function GradingPage() {
       <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-2xl font-extrabold tracking-tight text-stone-900 sm:text-3xl dark:text-stone-100">
-            AI Crop Quality Grading
+            {t('grading.title', 'AI Crop Quality Grading')}
           </h1>
           <p className="mt-1 text-sm text-stone-600 dark:text-stone-400">
-            टमाटर की फोटो खींचें और तुरंत एआई द्वारा गुणवत्ता ग्रेड (A, B, C) प्राप्त करें
+            {t('grading.subtitle', 'Capture tomato crop photo to instantly receive AI verified grade (A, B, C)')}
           </p>
         </div>
 
@@ -150,11 +158,11 @@ export default function GradingPage() {
               <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
                 <button
                   type="button"
-                  onClick={() => cameraInputRef.current?.click()}
+                  onClick={() => setCameraModalOpen(true)}
                   className="touch-target inline-flex items-center gap-2 rounded-xl bg-brand-700 px-5 py-3 text-sm font-bold text-white shadow-md hover:bg-brand-800 transition"
                 >
                   <Camera className="h-5 w-5" />
-                  <span>Open Camera (कैमरा खोलें)</span>
+                  <span>{t('grading.openCamera', 'Open Camera')}</span>
                 </button>
                 <button
                   type="button"
@@ -162,13 +170,13 @@ export default function GradingPage() {
                   className="touch-target inline-flex items-center gap-2 rounded-xl border border-stone-300 bg-stone-50 px-5 py-3 text-sm font-bold text-stone-700 hover:bg-stone-100 dark:border-stone-700 dark:bg-stone-800 dark:text-stone-200 transition"
                 >
                   <Upload className="h-5 w-5 text-stone-500" />
-                  <span>Choose from Gallery</span>
+                  <span>{t('grading.chooseGallery', 'Choose from Gallery')}</span>
                 </button>
               </div>
 
               {isCompressing && (
                 <p className="mt-4 text-xs font-semibold text-brand-700 animate-pulse">
-                  Optimizing photo size...
+                  {t('grading.optimizingPhoto', 'Optimizing photo size...')}
                 </p>
               )}
             </div>
@@ -271,6 +279,18 @@ export default function GradingPage() {
           />
         </div>
       )}
+
+      {/* Live Produce Camera Modal */}
+      <CameraCaptureModal
+        isOpen={cameraModalOpen}
+        onClose={() => setCameraModalOpen(false)}
+        onCapture={(file) => {
+          processSelectedFile(file);
+        }}
+        onFallbackToFilePicker={() => {
+          cameraInputRef.current?.click();
+        }}
+      />
     </div>
   );
 }

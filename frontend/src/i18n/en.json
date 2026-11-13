@@ -153,5 +153,29 @@
     "haveAccount": "Already have an account?",
     "demoTipTitle": "Demo Testing Tip:",
     "demoTipDesc": "Register a new farmer or buyer account below, or use your existing credentials to log in."
+  },
+  "grading": {
+    "title": "AI Crop Quality Grading",
+    "subtitle": "Capture tomato crop photo to instantly receive AI verified grade (A, B, C)",
+    "openCamera": "Open Camera",
+    "chooseGallery": "Choose from Gallery",
+    "takePhoto": "Take Photo",
+    "flipCamera": "Switch Camera",
+    "cameraTitle": "Live Produce Camera",
+    "cameraSubtitle": "Align harvested tomatoes inside the frame",
+    "alignProduce": "Place produce in target area",
+    "startingCamera": "Initializing live camera feed...",
+    "cameraErrorTitle": "Camera Unavailable",
+    "cameraNotSupported": "Your browser does not support live camera access. Please use the file upload option.",
+    "cameraPermissionDenied": "Camera permission was denied. Please allow camera access in your browser settings.",
+    "cameraNotFound": "No camera hardware found on this device.",
+    "cameraGenericError": "Could not access camera. Please check your device permissions.",
+    "chooseFileInstead": "Upload Photo from Device",
+    "chooseFile": "Gallery",
+    "optimizingPhoto": "Optimizing photo size...",
+    "runAssessment": "Run AI Quality Assessment",
+    "analyzing": "Analyzing with YOLO11n AI Engine...",
+    "changePhoto": "Change Photo",
+    "gradeAnother": "Grade Another Batch"
   }
 }

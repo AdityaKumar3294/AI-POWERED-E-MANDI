@@ -1,13 +1,13 @@
 import { Link } from 'react-router-dom';
-import { 
-  Sparkles, 
-  Plus, 
-  ShieldCheck, 
-  Store, 
-  Scale, 
-  Coins, 
-  ArrowRight, 
-  MapPin 
+import {
+  Sparkles,
+  Plus,
+  ShieldCheck,
+  Store,
+  Scale,
+  Coins,
+  ArrowRight,
+  MapPin
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 import { useFarmerDashboard } from '../hooks';
