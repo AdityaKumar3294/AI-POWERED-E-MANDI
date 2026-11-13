@@ -14,11 +14,11 @@ const analyzeGrading = async (req, res) => {
     // Send image to FastAPI AI service
     const aiResult = await analyzeImage(req.file.path);
 
-    // Make sure AI returned a valid result
-    if (!aiResult || !aiResult.success) {
+    // Make sure AI returned a valid result and produce was detected
+    if (!aiResult || !aiResult.success || !aiResult.total || aiResult.total === 0) {
       return res.status(400).json({
         success: false,
-        message: aiResult?.error || "AI grading failed",
+        message: aiResult?.error || "No tomatoes detected in the uploaded image. Please ensure your camera is pointed directly at harvested tomatoes.",
       });
     }
 
