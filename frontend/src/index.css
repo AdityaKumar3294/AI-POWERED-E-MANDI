@@ -1,0 +1,68 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --font-sans: 'Noto Sans', 'Noto Sans Devanagari', system-ui, -apple-system, sans-serif;
+
+  /* Brand Emerald Scale */
+  --color-brand-50: #ecfdf5;
+  --color-brand-100: #d1fae5;
+  --color-brand-200: #a7f3d0;
+  --color-brand-300: #6ee7b7;
+  --color-brand-400: #34d399;
+  --color-brand-500: #10b981;
+  --color-brand-600: #059669;
+  --color-brand-700: #047857;
+  --color-brand-800: #065f46;
+  --color-brand-900: #064e3b;
+
+  /* Agricultural Quality Grades */
+  --color-grade-a: #047857;
+  --color-grade-a-bg: #ecfdf5;
+  --color-grade-b: #d97706;
+  --color-grade-b-bg: #fffbeb;
+  --color-grade-c: #dc2626;
+  --color-grade-c-bg: #fef2f2;
+
+  /* Warm Neutral Surfaces */
+  --color-surface-light: #fafaf9;
+  --color-surface-dark: #0c0a09;
+}
+
+@layer base {
+  html {
+    font-size: 16px;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  body {
+    min-width: 360px;
+    font-family: var(--font-sans);
+    line-height: 1.5;
+  }
+
+  /* High contrast visible focus for WCAG 2.2 AA */
+  :focus-visible {
+    outline: 2px solid var(--color-brand-700);
+    outline-offset: 2px;
+  }
+
+  /* Low-end mobile tap target requirement (44px) */
+  .touch-target {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  /* Prefers reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    *, ::before, ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+

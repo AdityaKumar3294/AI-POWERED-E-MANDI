@@ -1,0 +1,41 @@
+{
+  "brand": "AI E-Mandi",
+  "tagline": "AI-Powered Agricultural Marketplace & Digital Grading",
+  "common": {
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "dashboard": "Dashboard",
+    "marketplace": "Marketplace",
+    "grading": "Crop Grading",
+    "certificates": "Certificates",
+    "myProducts": "My Produce",
+    "orders": "Orders",
+    "viewDetails": "View Details",
+    "search": "Search produce...",
+    "filter": "Filter",
+    "grade": "Grade",
+    "price": "Price",
+    "quantity": "Quantity",
+    "status": "Status",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "downloadPdf": "Download PDF",
+    "verify": "Verify",
+    "verified": "Verified",
+    "loading": "Loading...",
+    "error": "An error occurred",
+    "tryAgain": "Try Again"
+  },
+  "roles": {
+    "farmer": "Farmer / Producer",
+    "buyer": "Wholesale Buyer"
+  },
+  "grades": {
+    "gradeA": "Grade A (Premium)",
+    "gradeB": "Grade B (Standard)",
+    "gradeC": "Grade C (Processing)"
+  }
+}
+
