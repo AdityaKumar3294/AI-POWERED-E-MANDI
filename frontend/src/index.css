@@ -39,11 +39,13 @@
     text-size-adjust: 100%;
     background-color: var(--color-surface-light);
     color: #1c1917;
+    color-scheme: light;
   }
 
   html.dark {
     background-color: #0c0a09;
     color: #f5f5f4;
+    color-scheme: dark;
   }
 
   body {
@@ -66,11 +68,6 @@
     min-width: 44px;
   }
 
-  /* Form controls defaults in dark mode */
-  .dark select, .dark input, .dark textarea {
-    color-scheme: dark;
-  }
-
   /* Prefers reduced motion */
   @media (prefers-reduced-motion: reduce) {
     *, ::before, ::after {
@@ -80,5 +77,83 @@
       scroll-behavior: auto !important;
     }
   }
+}
+
+/* =====================================================================
+   UNLAYERED DARK MODE FORM & AUTOFILL ENFORCEMENT
+   Placed outside @layer so that it overrides Chrome/WebKit user-agent
+   defaults and any conflicting utility rules with maximum precedence.
+   ===================================================================== */
+
+/* Ensure form controls inherit color-scheme properly */
+.dark select,
+.dark input,
+.dark textarea {
+  color-scheme: dark;
+}
+
+/* Force dark mode inputs to remain dark stone background and light text */
+.dark input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="reset"]),
+.dark textarea,
+.dark select,
+html.dark input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="reset"]),
+html.dark textarea,
+html.dark select {
+  background-color: #292524 !important;
+  color: #f5f5f4 !important;
+}
+
+.dark input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="reset"]):focus,
+.dark textarea:focus,
+.dark select:focus,
+html.dark input:not([type="checkbox"]):not([type="radio"]):not([type="submit"]):not([type="button"]):not([type="reset"]):focus,
+html.dark textarea:focus,
+html.dark select:focus {
+  background-color: #292524 !important;
+  color: #f5f5f4 !important;
+}
+
+/* Autofill Styling: Light Mode */
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus,
+input:-webkit-autofill:active,
+input:autofill,
+input:autofill:hover,
+input:autofill:focus,
+input:autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #ffffff inset !important;
+  box-shadow: 0 0 0 1000px #ffffff inset !important;
+  -webkit-text-fill-color: #1c1917 !important;
+  caret-color: #1c1917 !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* Autofill Styling: Dark Mode */
+.dark input:-webkit-autofill,
+.dark input:-webkit-autofill:hover, 
+.dark input:-webkit-autofill:focus,
+.dark input:-webkit-autofill:active,
+.dark textarea:-webkit-autofill,
+.dark select:-webkit-autofill,
+.dark input:autofill,
+.dark input:autofill:hover,
+.dark input:autofill:focus,
+.dark input:autofill:active,
+html.dark input:-webkit-autofill,
+html.dark input:-webkit-autofill:hover, 
+html.dark input:-webkit-autofill:focus,
+html.dark input:-webkit-autofill:active,
+html.dark textarea:-webkit-autofill,
+html.dark select:-webkit-autofill,
+html.dark input:autofill,
+html.dark input:autofill:hover,
+html.dark input:autofill:focus,
+html.dark input:autofill:active {
+  -webkit-box-shadow: 0 0 0 1000px #292524 inset !important;
+  box-shadow: 0 0 0 1000px #292524 inset !important;
+  -webkit-text-fill-color: #f5f5f4 !important;
+  caret-color: #f5f5f4 !important;
+  transition: background-color 5000s ease-in-out 0s;
 }
 

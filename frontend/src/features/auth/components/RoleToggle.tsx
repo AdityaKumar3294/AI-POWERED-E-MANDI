@@ -1,4 +1,5 @@
 import { Sprout, ShoppingBag } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 interface RoleToggleProps {
   value: 'farmer' | 'buyer';
@@ -7,6 +8,8 @@ interface RoleToggleProps {
 }
 
 export function RoleToggle({ value, onChange, disabled = false }: RoleToggleProps) {
+  const { t } = useTranslation();
+
   return (
     <div
       role="radiogroup"
@@ -27,8 +30,8 @@ export function RoleToggle({ value, onChange, disabled = false }: RoleToggleProp
         }`}
       >
         <Sprout className={`h-6 w-6 ${value === 'farmer' ? 'text-brand-700 dark:text-brand-400' : 'text-stone-400'}`} />
-        <span className="mt-1 text-sm font-bold">Farmer</span>
-        <span className="text-[11px] opacity-75">किसान (Producer)</span>
+        <span className="mt-1 text-sm font-bold">{t('auth.farmerRole', 'Farmer')}</span>
+        <span className="text-[11px] opacity-75">{t('auth.farmerRoleSub', 'Producer')}</span>
       </button>
 
       {/* Buyer Option */}
@@ -45,8 +48,8 @@ export function RoleToggle({ value, onChange, disabled = false }: RoleToggleProp
         }`}
       >
         <ShoppingBag className={`h-6 w-6 ${value === 'buyer' ? 'text-amber-600 dark:text-amber-400' : 'text-stone-400'}`} />
-        <span className="mt-1 text-sm font-bold">Buyer</span>
-        <span className="text-[11px] opacity-75">थोक व्यापारी (Wholesale)</span>
+        <span className="mt-1 text-sm font-bold">{t('auth.buyerRole', 'Buyer')}</span>
+        <span className="text-[11px] opacity-75">{t('auth.buyerRoleSub', 'Wholesale')}</span>
       </button>
     </div>
   );

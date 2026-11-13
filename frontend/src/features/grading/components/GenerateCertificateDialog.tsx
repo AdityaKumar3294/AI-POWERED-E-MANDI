@@ -112,7 +112,7 @@ export function GenerateCertificateDialog({
               value={produceName}
               onChange={(e) => setProduceName(e.target.value)}
               placeholder="e.g. Hybrid Roma Tomatoes"
-              className="touch-target mt-1.5 block w-full rounded-xl border border-stone-300 bg-stone-50 px-3.5 py-2.5 text-base text-stone-900 focus:border-brand-700 focus:bg-white focus:outline-none dark:border-stone-700 dark:bg-stone-800 dark:text-stone-100"
+              className="touch-target mt-1.5 block w-full rounded-xl border border-stone-300 bg-stone-50 px-3.5 py-2.5 text-base text-stone-900 focus:border-brand-700 focus:bg-white focus:outline-none dark:border-stone-700 dark:bg-stone-800 dark:focus:bg-stone-800 dark:text-stone-100"
             />
             <p className="mt-1 text-xs text-stone-500">
               This name will appear on the official scannable PDF certificate.

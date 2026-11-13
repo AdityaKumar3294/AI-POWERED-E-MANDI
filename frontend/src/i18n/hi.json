@@ -129,5 +129,29 @@
     "activeListings": "सक्रिय उपज",
     "totalGraded": "ग्रेड की गई फसलें",
     "certificatesMinted": "जारी प्रमाणपत्र"
+  },
+  "auth": {
+    "signInTitle": "ई-मंडी पोर्टल पर लॉग इन करें",
+    "signInSubtitle": "अपने किसान या खरीदार खाते में प्रवेश करें",
+    "registerTitle": "अपना नया खाता बनाएं",
+    "registerSubtitle": "भारत की एआई-संचालित पारदर्शी कृषि मंडी से जुड़ें",
+    "emailLabel": "ईमेल पता",
+    "passwordLabel": "पासवर्ड",
+    "nameLabel": "पूरा नाम",
+    "locationLabel": "स्थान / शहर (उदा. नासिक)",
+    "roleLabel": "खाता प्रकार चुनें",
+    "farmerRole": "किसान",
+    "farmerRoleSub": "फसल उत्पादक",
+    "buyerRole": "थोक खरीदार",
+    "buyerRoleSub": "व्यापारी",
+    "signInBtn": "लॉग इन करें",
+    "signingIn": "लॉग इन हो रहा है...",
+    "registerBtn": "खाता बनाएं",
+    "registering": "पंजीकरण हो रहा है...",
+    "noAccount": "क्या आपका खाता नहीं है?",
+    "createAccount": "नया खाता बनाएं",
+    "haveAccount": "पहले से खाता है?",
+    "demoTipTitle": "डेमो परीक्षण सुझाव:",
+    "demoTipDesc": "नीचे एक नया किसान या खरीदार खाता पंजीकृत करें, या लॉग इन करने के लिए मौजूदा क्रेडेंशियल्स का उपयोग करें।"
   }
 }

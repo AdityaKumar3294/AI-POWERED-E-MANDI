@@ -137,7 +137,7 @@ export function OrderForm({ product }: OrderFormProps) {
                 disabled={isSoldOut}
                 value={quantity}
                 onChange={(e) => handleQuantityChange(Number(e.target.value))}
-                className="touch-target block w-full rounded-xl border border-stone-300 bg-stone-50/50 py-2.5 px-3 text-center text-lg font-extrabold text-stone-900 focus:border-brand-700 focus:bg-white focus:outline-none dark:border-stone-700 dark:bg-stone-800 dark:text-stone-100"
+                className="touch-target block w-full rounded-xl border border-stone-300 bg-stone-50/50 py-2.5 px-3 text-center text-lg font-extrabold text-stone-900 focus:border-brand-700 focus:bg-white focus:outline-none dark:border-stone-700 dark:bg-stone-800 dark:focus:bg-stone-800 dark:text-stone-100"
               />
               <span className="pointer-events-none absolute inset-y-0 right-3 flex items-center text-xs font-semibold text-stone-400">
                 kg
@@ -203,7 +203,7 @@ export function OrderForm({ product }: OrderFormProps) {
               disabled={isSoldOut}
               placeholder="e.g. Gala No. 12, APMC Fruit & Veg Market, Vashi, Navi Mumbai"
               {...register('deliveryAddress')}
-              className="touch-target block w-full rounded-xl border border-stone-300 bg-stone-50/50 py-2.5 pl-10 pr-3 text-sm text-stone-900 transition placeholder:text-stone-400 focus:border-brand-700 focus:bg-white focus:outline-none dark:border-stone-700 dark:bg-stone-800 dark:text-stone-100"
+              className="touch-target block w-full rounded-xl border border-stone-300 bg-stone-50/50 py-2.5 pl-10 pr-3 text-sm text-stone-900 transition placeholder:text-stone-400 focus:border-brand-700 focus:bg-white focus:outline-none dark:border-stone-700 dark:bg-stone-800 dark:focus:bg-stone-800 dark:text-stone-100"
             />
           </div>
           {errors.deliveryAddress && (

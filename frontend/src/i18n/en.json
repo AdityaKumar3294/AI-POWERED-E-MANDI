@@ -129,5 +129,29 @@
     "activeListings": "Active Listings",
     "totalGraded": "Crops Graded",
     "certificatesMinted": "Certificates Minted"
+  },
+  "auth": {
+    "signInTitle": "Sign In to E-Mandi",
+    "signInSubtitle": "Log in to access your farmer or buyer portal",
+    "registerTitle": "Create Your Account",
+    "registerSubtitle": "Join India's AI-powered transparent crop marketplace",
+    "emailLabel": "Email Address",
+    "passwordLabel": "Password",
+    "nameLabel": "Full Name",
+    "locationLabel": "Primary Location / City",
+    "roleLabel": "Select Account Type",
+    "farmerRole": "Farmer",
+    "farmerRoleSub": "Producer",
+    "buyerRole": "Buyer",
+    "buyerRoleSub": "Wholesale",
+    "signInBtn": "Sign In",
+    "signingIn": "Signing In...",
+    "registerBtn": "Create Account",
+    "registering": "Registering Account...",
+    "noAccount": "Don't have an account yet?",
+    "createAccount": "Create New Account",
+    "haveAccount": "Already have an account?",
+    "demoTipTitle": "Demo Testing Tip:",
+    "demoTipDesc": "Register a new farmer or buyer account below, or use your existing credentials to log in."
   }
 }

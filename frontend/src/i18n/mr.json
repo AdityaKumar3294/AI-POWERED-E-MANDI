@@ -129,5 +129,29 @@
     "activeListings": "सक्रिय शेतमाल",
     "totalGraded": "प्रतवारी केलेली पिके",
     "certificatesMinted": "तयार प्रमाणपत्रे"
+  },
+  "auth": {
+    "signInTitle": "ई-मंडी पोर्टलवर लॉग इन करा",
+    "signInSubtitle": "तुमच्या शेतकरी किंवा खरेदीदार खात्यात प्रवेश करा",
+    "registerTitle": "नवीन खाते तयार करा",
+    "registerSubtitle": "भारताच्या पारदर्शक एआय कृषी बाजारात सामील व्हा",
+    "emailLabel": "ईमेल पत्ता",
+    "passwordLabel": "पासवर्ड",
+    "nameLabel": "पूर्ण नाव",
+    "locationLabel": "पत्ता / शहर (उदा. नाशिक)",
+    "roleLabel": "खाते प्रकार निवडा",
+    "farmerRole": "शेतकरी",
+    "farmerRoleSub": "पीक उत्पादक",
+    "buyerRole": "घाऊक खरेदीदार",
+    "buyerRoleSub": "व्यापारी",
+    "signInBtn": "लॉग इन करा",
+    "signingIn": "लॉग इन होत आहे...",
+    "registerBtn": "नोंदणी करा",
+    "registering": "नोंदणी होत आहे...",
+    "noAccount": "अद्याप खाते नाही का?",
+    "createAccount": "नवीन खाते तयार करा",
+    "haveAccount": "आधीच खाते आहे का?",
+    "demoTipTitle": "डेमो चाचणी सूचना:",
+    "demoTipDesc": "खाली नवीन शेतकरी किंवा खरेदीदार खाते नोंदवा किंवा लॉग इन करण्यासाठी अस्तित्वात असलेली माहिती वापरा."
   }
 }

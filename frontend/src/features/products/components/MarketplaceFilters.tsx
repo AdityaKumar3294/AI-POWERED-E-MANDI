@@ -131,7 +131,7 @@ export function MarketplaceFilters() {
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder={t('marketplace.searchPlaceholder', 'Search tomatoes, produce, or varieties...')}
             aria-label="Search produce"
-            className="touch-target block w-full rounded-xl border border-stone-300 bg-stone-50/50 py-2.5 pl-10 pr-9 text-base text-stone-900 transition placeholder:text-stone-400 focus:border-brand-700 focus:bg-white focus:outline-none dark:border-stone-700 dark:bg-stone-800 dark:text-stone-100 dark:placeholder-stone-500"
+            className="touch-target block w-full rounded-xl border border-stone-300 bg-stone-50/50 py-2.5 pl-10 pr-9 text-base text-stone-900 transition placeholder:text-stone-400 focus:border-brand-700 focus:bg-white focus:outline-none dark:border-stone-700 dark:bg-stone-800 dark:focus:bg-stone-800 dark:text-stone-100 dark:placeholder-stone-500"
           />
           {searchTerm && (
             <button
@@ -205,7 +205,7 @@ export function MarketplaceFilters() {
               value={minPrice}
               onChange={(e) => setMinPrice(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handlePriceApply()}
-              className="touch-target w-20 rounded-xl border border-stone-300 bg-stone-50/50 px-2.5 py-1.5 text-xs text-stone-900 focus:border-brand-700 focus:bg-white focus:outline-none dark:border-stone-700 dark:bg-stone-800 dark:text-stone-100"
+              className="touch-target w-20 rounded-xl border border-stone-300 bg-stone-50/50 px-2.5 py-1.5 text-xs text-stone-900 focus:border-brand-700 focus:bg-white focus:outline-none dark:border-stone-700 dark:bg-stone-800 dark:focus:bg-stone-800 dark:text-stone-100"
             />
             <span className="text-stone-400">-</span>
             <input
@@ -215,7 +215,7 @@ export function MarketplaceFilters() {
               value={maxPrice}
               onChange={(e) => setMaxPrice(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handlePriceApply()}
-              className="touch-target w-20 rounded-xl border border-stone-300 bg-stone-50/50 px-2.5 py-1.5 text-xs text-stone-900 focus:border-brand-700 focus:bg-white focus:outline-none dark:border-stone-700 dark:bg-stone-800 dark:text-stone-100"
+              className="touch-target w-20 rounded-xl border border-stone-300 bg-stone-50/50 px-2.5 py-1.5 text-xs text-stone-900 focus:border-brand-700 focus:bg-white focus:outline-none dark:border-stone-700 dark:bg-stone-800 dark:focus:bg-stone-800 dark:text-stone-100"
             />
           </div>
           <button

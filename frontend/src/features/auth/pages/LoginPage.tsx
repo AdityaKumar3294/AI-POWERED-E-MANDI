@@ -2,6 +2,7 @@ import { useActionState, useEffect, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { LogIn, Eye, EyeOff, Lock, Mail, Sprout, ArrowRight } from 'lucide-react';
 import { toast } from 'sonner';
+import { useTranslation } from 'react-i18next';
 
 import { loginSchema } from '../schemas';
 import { authApi } from '../api';
@@ -15,6 +16,7 @@ interface ActionState {
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const [searchParams] = useSearchParams();
   const next = searchParams.get('next');
   const setAuth = useAuthStore((s) => s.setAuth);
@@ -71,7 +73,7 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-[80vh] items-center justify-center px-4 py-12 sm:px-6 lg:px-8">
       {/* React 19 Document Metadata */}
-      <title>Login | AI-Powered E-Mandi</title>
+      <title>{t('auth.signInTitle', 'Sign In to E-Mandi')} | {t('brand', 'AI E-Mandi')}</title>
       <meta name="description" content="Log in to access your AI E-Mandi farmer or buyer portal." />
 
       <div className="w-full max-w-md space-y-8 rounded-2xl border border-stone-200 bg-white p-6 shadow-xl sm:p-8 dark:border-stone-800 dark:bg-stone-900">
@@ -81,10 +83,10 @@ export default function LoginPage() {
             <Sprout className="h-8 w-8" />
           </div>
           <h1 className="mt-4 text-2xl font-extrabold tracking-tight text-stone-900 sm:text-3xl dark:text-stone-100">
-            Sign In to E-Mandi
+            {t('auth.signInTitle', 'Sign In to E-Mandi')}
           </h1>
           <p className="mt-1.5 text-sm text-stone-600 dark:text-stone-400">
-            ई-मंडी पोर्टल पर लॉग इन करें
+            {t('auth.signInSubtitle', 'Log in to access your farmer or buyer portal')}
           </p>
         </div>
 
@@ -106,10 +108,10 @@ export default function LoginPage() {
               htmlFor="email"
               className="block text-sm font-semibold text-stone-700 dark:text-stone-300"
             >
-              Email Address (ईमेल)
+              {t('auth.emailLabel', 'Email Address')}
             </label>
             <div className="relative mt-1.5">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400">
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400 dark:text-stone-500">
                 <Mail className="h-5 w-5" aria-hidden="true" />
               </div>
               <input
@@ -122,10 +124,10 @@ export default function LoginPage() {
                 placeholder="name@example.com"
                 aria-invalid={Boolean(state.errors?.email)}
                 aria-describedby={state.errors?.email ? 'email-error' : undefined}
-                className={`touch-target block w-full rounded-xl border bg-stone-50/50 py-3 pl-10 pr-4 text-base text-stone-900 transition placeholder:text-stone-400 focus:bg-white focus:outline-none dark:bg-stone-800 dark:text-stone-100 dark:focus:border-brand-500 ${
+                className={`touch-target block w-full rounded-xl border bg-white py-3 pl-10 pr-4 text-base text-stone-900 transition placeholder:text-stone-400 focus:outline-hidden dark:bg-stone-800 dark:focus:bg-stone-800 dark:text-stone-100 dark:focus:text-stone-100 dark:placeholder:text-stone-500 ${
                   state.errors?.email
-                    ? 'border-red-500 focus:border-red-500'
-                    : 'border-stone-300 focus:border-brand-700 dark:border-stone-700'
+                    ? 'border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 dark:border-red-500'
+                    : 'border-stone-300 focus:border-brand-600 focus:ring-2 focus:ring-brand-500/20 dark:border-stone-700 dark:focus:border-brand-500'
                 }`}
               />
             </div>
@@ -142,10 +144,10 @@ export default function LoginPage() {
               htmlFor="password"
               className="block text-sm font-semibold text-stone-700 dark:text-stone-300"
             >
-              Password (पासवर्ड)
+              {t('auth.passwordLabel', 'Password')}
             </label>
             <div className="relative mt-1.5">
-              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400">
+              <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400 dark:text-stone-500">
                 <Lock className="h-5 w-5" aria-hidden="true" />
               </div>
               <input
@@ -158,10 +160,10 @@ export default function LoginPage() {
                 placeholder="••••••••"
                 aria-invalid={Boolean(state.errors?.password)}
                 aria-describedby={state.errors?.password ? 'password-error' : undefined}
-                className={`touch-target block w-full rounded-xl border bg-stone-50/50 py-3 pl-10 pr-11 text-base text-stone-900 transition placeholder:text-stone-400 focus:bg-white focus:outline-none dark:bg-stone-800 dark:text-stone-100 dark:focus:border-brand-500 ${
+                className={`touch-target block w-full rounded-xl border bg-white py-3 pl-10 pr-11 text-base text-stone-900 transition placeholder:text-stone-400 focus:outline-hidden dark:bg-stone-800 dark:focus:bg-stone-800 dark:text-stone-100 dark:focus:text-stone-100 dark:placeholder:text-stone-500 ${
                   state.errors?.password
-                    ? 'border-red-500 focus:border-red-500'
-                    : 'border-stone-300 focus:border-brand-700 dark:border-stone-700'
+                    ? 'border-red-500 focus:border-red-500 focus:ring-2 focus:ring-red-500/20 dark:border-red-500'
+                    : 'border-stone-300 focus:border-brand-600 focus:ring-2 focus:ring-brand-500/20 dark:border-stone-700 dark:focus:border-brand-500'
                 }`}
               />
               <button
@@ -189,12 +191,12 @@ export default function LoginPage() {
             {isPending ? (
               <div className="flex items-center gap-2">
                 <div className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                <span>Signing In...</span>
+                <span>{t('auth.signingIn', 'Signing In...')}</span>
               </div>
             ) : (
               <>
                 <LogIn className="h-5 w-5" />
-                <span>Sign In</span>
+                <span>{t('auth.signInBtn', 'Sign In')}</span>
                 <ArrowRight className="h-4 w-4 opacity-75" />
               </>
             )}
@@ -203,18 +205,20 @@ export default function LoginPage() {
 
         {/* Demo Credentials Tip for easy testing */}
         <div className="rounded-xl border border-dashed border-stone-300 bg-stone-100/80 p-3.5 text-xs text-stone-700 dark:border-stone-700 dark:bg-stone-800/90 dark:text-stone-200">
-          <p className="font-semibold text-stone-900 dark:text-stone-100">Demo Testing Tip:</p>
-          <p className="mt-1 text-stone-600 dark:text-stone-300">Register a new farmer or buyer account below, or use your existing credentials to log in.</p>
+          <p className="font-semibold text-stone-900 dark:text-stone-100">{t('auth.demoTipTitle', 'Demo Testing Tip:')}</p>
+          <p className="mt-1 text-stone-600 dark:text-stone-300">
+            {t('auth.demoTipDesc', 'Register a new farmer or buyer account below, or use your existing credentials to log in.')}
+          </p>
         </div>
 
         {/* Footer Link */}
         <div className="pt-2 text-center text-sm text-stone-600 dark:text-stone-400">
-          Don't have an account yet?{' '}
+          {t('auth.noAccount', "Don't have an account yet?")}{' '}
           <Link
             to="/register"
             className="font-bold text-brand-700 hover:text-brand-800 dark:text-brand-400 dark:hover:text-brand-300"
           >
-            Create New Account (पंजीकरण करें)
+            {t('auth.createAccount', 'Create New Account')}
           </Link>
         </div>
       </div>
