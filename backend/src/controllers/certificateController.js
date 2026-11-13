@@ -31,6 +31,14 @@ const createCertificate = async (req, res) => {
       });
     }
 
+    // Ensure report has valid tomatoes detected
+    if (!report.total || report.total === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Cannot issue a digital quality certificate for a scan with zero produce detected.",
+      });
+    }
+
     // Ensure the logged-in farmer owns this report
     if (report.farmerId.toString() !== req.user.userId) {
       return res.status(403).json({

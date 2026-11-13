@@ -10,6 +10,27 @@ interface GradingMetricsCardProps {
 export function GradingMetricsCard({ result, className = '' }: GradingMetricsCardProps) {
   const defectPct = Number(result.defectPercentage || 0);
 
+  // Guard against zero produce detected (e.g. human face or background)
+  if (!result.total || result.total === 0) {
+    return (
+      <div className={`space-y-4 rounded-2xl border border-amber-200 bg-amber-50/70 p-5 shadow-xs dark:border-amber-900/60 dark:bg-amber-950/40 ${className}`}>
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-amber-100 text-amber-700 dark:bg-amber-900/60 dark:text-amber-400">
+            <AlertTriangle className="h-6 w-6" />
+          </div>
+          <div>
+            <h3 className="text-base font-bold text-amber-900 dark:text-amber-200">
+              No Produce Detected (कोई टमाटर नहीं मिला)
+            </h3>
+            <p className="text-xs text-amber-700 dark:text-amber-300 mt-0.5">
+              The AI model could not detect any tomatoes in this image. The photo appears to contain a person, background, or non-crop objects. Please retake the photo with harvested tomatoes in view.
+            </p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   let gradeDesc = 'Processing Grade (>25% defects)';
   if (result.grade === 'A') {
     gradeDesc = 'Premium Quality (<10% defects)';

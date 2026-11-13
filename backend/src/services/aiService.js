@@ -80,6 +80,23 @@ const analyzeImage = async (imagePath) => {
       }
     }
 
+    // If zero tomatoes detected (e.g. human face, background, empty room)
+    if (total === 0) {
+      return {
+        success: false,
+        isProduceDetected: false,
+        total: 0,
+        healthy: 0,
+        defective: 0,
+        defectPercentage: 0,
+        averageSize: "unknown",
+        averageSizePixels: null,
+        grade: null,
+        detections: [],
+        error: "No tomatoes detected in the image. Please take a clear photo of harvested tomatoes (फोटो में कोई टमाटर नहीं पाया गया। कृपया फसल की स्पष्ट फोटो लें).",
+      };
+    }
+
     // Demo grading thresholds based on defect percentage.
     let grade = "C";
 

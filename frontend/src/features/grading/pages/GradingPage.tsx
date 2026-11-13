@@ -251,8 +251,9 @@ export default function GradingPage() {
               <div className="space-y-3">
                 <button
                   type="button"
+                  disabled={!analysisResult.result.total || analysisResult.result.total === 0}
                   onClick={() => setCertDialogOpen(true)}
-                  className="touch-target flex w-full items-center justify-center gap-2 rounded-xl bg-brand-700 py-3.5 px-4 text-base font-bold text-white shadow-md hover:bg-brand-800 transition"
+                  className="touch-target flex w-full items-center justify-center gap-2 rounded-xl bg-brand-700 py-3.5 px-4 text-base font-bold text-white shadow-md hover:bg-brand-800 disabled:opacity-40 disabled:cursor-not-allowed transition"
                 >
                   <Award className="h-5 w-5" />
                   <span>Generate Digital Quality Certificate</span>
