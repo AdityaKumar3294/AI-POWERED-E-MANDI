@@ -28,6 +28,8 @@
   /* Warm Neutral Surfaces */
   --color-surface-light: #fafaf9;
   --color-surface-dark: #0c0a09;
+  --color-stone-850: #1c1917;
+  --color-stone-925: #141210;
 }
 
 @layer base {
@@ -35,12 +37,21 @@
     font-size: 16px;
     -webkit-text-size-adjust: 100%;
     text-size-adjust: 100%;
+    background-color: var(--color-surface-light);
+    color: #1c1917;
+  }
+
+  html.dark {
+    background-color: #0c0a09;
+    color: #f5f5f4;
   }
 
   body {
     min-width: 360px;
     font-family: var(--font-sans);
     line-height: 1.5;
+    background-color: transparent;
+    color: inherit;
   }
 
   /* High contrast visible focus for WCAG 2.2 AA */
@@ -53,6 +64,11 @@
   .touch-target {
     min-height: 44px;
     min-width: 44px;
+  }
+
+  /* Form controls defaults in dark mode */
+  .dark select, .dark input, .dark textarea {
+    color-scheme: dark;
   }
 
   /* Prefers reduced motion */

@@ -11,6 +11,7 @@ import {
   Truck, 
   Ban 
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type { Order } from '@/types';
 import { formatCurrency, formatWeight, formatDate } from '@/lib/format';
 import { StatusBadge } from '@/components/ui/StatusBadge';
@@ -33,6 +34,8 @@ export function OrderDetailDrawer({
   onClose,
   onActionSelect,
 }: OrderDetailDrawerProps) {
+  const { t } = useTranslation();
+
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && open) {
@@ -48,13 +51,22 @@ export function OrderDetailDrawer({
   const allowedActions = getAllowedOrderActions(order, role);
 
   const counterparty = role === 'farmer' ? order.buyerId : order.farmerId;
-  const counterpartyRoleLabel = role === 'farmer' ? 'Wholesale Buyer' : 'Producer Farmer';
+  const counterpartyRoleLabel = role === 'farmer' 
+    ? t('orders.wholesaleBuyer', 'Wholesale Buyer') 
+    : t('orders.producerFarmer', 'Producer Farmer');
 
   const actionIcons = {
     accept: CheckCircle2,
     reject: XCircle,
     complete: Truck,
     cancel: Ban,
+  };
+
+  const actionLabels: Record<string, string> = {
+    accept: t('orders.acceptOrder', 'Accept Order'),
+    reject: t('orders.rejectOrder', 'Reject Order'),
+    complete: t('orders.completeOrder', 'Complete Delivery'),
+    cancel: t('orders.cancelOrder', 'Cancel Order'),
   };
 
   return (
@@ -78,7 +90,7 @@ export function OrderDetailDrawer({
             <div>
               <div className="flex items-center gap-2">
                 <h3 id="order-drawer-title" className="text-base font-black text-stone-900 dark:text-stone-100">
-                  Order #{order._id.slice(-6).toUpperCase()}
+                  ORDER #{order._id.slice(-6).toUpperCase()}
                 </h3>
                 <StatusBadge status={order.status} />
               </div>
@@ -102,7 +114,7 @@ export function OrderDetailDrawer({
             {/* Produce Lot Card */}
             <div className="rounded-2xl border border-stone-200 bg-stone-50/70 p-4 dark:border-stone-800 dark:bg-stone-800/40">
               <span className="text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400">
-                Produce Consignment
+                {t('orders.produceConsignment', 'Produce Consignment')}
               </span>
 
               <div className="mt-2 flex items-start justify-between gap-3">
@@ -117,7 +129,7 @@ export function OrderDetailDrawer({
                 </div>
 
                 <div className="text-right">
-                  <span className="block text-xs text-stone-500 dark:text-stone-400">Rate / Kg</span>
+                  <span className="block text-xs text-stone-500 dark:text-stone-400">{t('orders.ratePerKg', 'Rate / Kg')}</span>
                   <span className="text-sm font-extrabold text-stone-900 dark:text-stone-100">
                     {formatCurrency(order.pricePerKg)}
                   </span>
@@ -128,7 +140,7 @@ export function OrderDetailDrawer({
               <div className="mt-4 grid grid-cols-2 gap-2 border-t border-stone-200/80 pt-3 text-xs dark:border-stone-700/80">
                 <div className="flex items-center gap-1.5 text-stone-600 dark:text-stone-300">
                   <Scale className="h-4 w-4 text-brand-600 dark:text-brand-400" />
-                  <span>Quantity:</span>
+                  <span>{t('common.quantity', 'Quantity')}:</span>
                   <strong className="text-stone-900 dark:text-stone-100">
                     {formatWeight(order.quantity)}
                   </strong>
@@ -136,7 +148,7 @@ export function OrderDetailDrawer({
 
                 <div className="flex items-center justify-end gap-1.5 text-stone-600 dark:text-stone-300">
                   <Coins className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-                  <span>Total Amount:</span>
+                  <span>{t('orders.totalLotValue', 'Total Amount')}:</span>
                   <strong className="text-sm font-black text-brand-700 dark:text-brand-400">
                     {formatCurrency(order.totalAmount)}
                   </strong>
@@ -172,7 +184,7 @@ export function OrderDetailDrawer({
 
                 <div className="border-t border-stone-100 pt-2 dark:border-stone-800">
                   <span className="block font-semibold text-stone-700 dark:text-stone-300">
-                    Delivery Address:
+                    {t('orders.deliveryAddress', 'Delivery Address:')}
                   </span>
                   <p className="mt-1 rounded-lg bg-stone-50 p-2.5 text-xs text-stone-700 dark:bg-stone-800 dark:text-stone-300">
                     {order.deliveryAddress}
@@ -183,6 +195,9 @@ export function OrderDetailDrawer({
 
             {/* Order Progress Timeline */}
             <div className="rounded-2xl border border-stone-200 bg-white p-4 dark:border-stone-800 dark:bg-stone-900">
+              <span className="block mb-2 text-xs font-bold uppercase tracking-wider text-stone-500 dark:text-stone-400">
+                {t('orders.orderProgressTimeline', 'ORDER PROGRESS TIMELINE')}
+              </span>
               <OrderTimeline order={order} />
             </div>
           </div>
@@ -201,6 +216,7 @@ export function OrderDetailDrawer({
                     warning:
                       'bg-amber-600 text-white hover:bg-amber-700 shadow-sm focus:ring-amber-500',
                   };
+                  const label = actionLabels[action.action] || action.label;
 
                   return (
                     <button
@@ -210,7 +226,7 @@ export function OrderDetailDrawer({
                       className={`flex h-12 flex-1 items-center justify-center gap-2 rounded-xl px-4 text-xs font-bold transition-all focus:ring-2 focus:outline-hidden ${buttonStyles[action.variant]}`}
                     >
                       <Icon className="h-4 w-4" />
-                      <span>{action.label}</span>
+                      <span>{label}</span>
                     </button>
                   );
                 })}

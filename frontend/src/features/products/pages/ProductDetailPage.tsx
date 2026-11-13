@@ -1,5 +1,6 @@
 import { useParams, Link } from 'react-router-dom';
 import { ChevronLeft, MapPin, User, ShieldCheck, Clock } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 import { useProduct } from '../hooks';
 import { CertificatePreviewCard } from '../components/CertificatePreviewCard';
@@ -13,6 +14,7 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { ErrorState } from '@/components/ui/ErrorState';
 
 export default function ProductDetailPage() {
+  const { t } = useTranslation();
   const { id } = useParams<{ id: string }>();
   const { data, isLoading, isError, error, refetch } = useProduct(id || '');
 
@@ -74,7 +76,7 @@ export default function ProductDetailPage() {
           className="touch-target inline-flex items-center gap-1.5 text-sm font-semibold text-stone-600 hover:text-brand-700 dark:text-stone-400 dark:hover:text-brand-300"
         >
           <ChevronLeft className="h-4 w-4" />
-          <span>Back to Marketplace</span>
+          <span>{t('orders.exploreMarketplace', 'Back to Marketplace')}</span>
         </Link>
       </div>
 

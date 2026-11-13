@@ -122,7 +122,7 @@ export default function LoginPage() {
                 placeholder="name@example.com"
                 aria-invalid={Boolean(state.errors?.email)}
                 aria-describedby={state.errors?.email ? 'email-error' : undefined}
-                className={`touch-target block w-full rounded-xl border bg-stone-50/50 py-3 pl-10 pr-4 text-base text-stone-900 transition placeholder:text-stone-400 focus:bg-white focus:outline-none dark:bg-stone-800 dark:text-stone-100 dark:focus:bg-stone-850 ${
+                className={`touch-target block w-full rounded-xl border bg-stone-50/50 py-3 pl-10 pr-4 text-base text-stone-900 transition placeholder:text-stone-400 focus:bg-white focus:outline-none dark:bg-stone-800 dark:text-stone-100 dark:focus:border-brand-500 ${
                   state.errors?.email
                     ? 'border-red-500 focus:border-red-500'
                     : 'border-stone-300 focus:border-brand-700 dark:border-stone-700'
@@ -158,7 +158,7 @@ export default function LoginPage() {
                 placeholder="••••••••"
                 aria-invalid={Boolean(state.errors?.password)}
                 aria-describedby={state.errors?.password ? 'password-error' : undefined}
-                className={`touch-target block w-full rounded-xl border bg-stone-50/50 py-3 pl-10 pr-11 text-base text-stone-900 transition placeholder:text-stone-400 focus:bg-white focus:outline-none dark:bg-stone-800 dark:text-stone-100 dark:focus:bg-stone-850 ${
+                className={`touch-target block w-full rounded-xl border bg-stone-50/50 py-3 pl-10 pr-11 text-base text-stone-900 transition placeholder:text-stone-400 focus:bg-white focus:outline-none dark:bg-stone-800 dark:text-stone-100 dark:focus:border-brand-500 ${
                   state.errors?.password
                     ? 'border-red-500 focus:border-red-500'
                     : 'border-stone-300 focus:border-brand-700 dark:border-stone-700'
@@ -202,9 +202,9 @@ export default function LoginPage() {
         </form>
 
         {/* Demo Credentials Tip for easy testing */}
-        <div className="rounded-xl border border-dashed border-stone-300 bg-stone-50 p-3 text-xs text-stone-600 dark:border-stone-800 dark:bg-stone-850 dark:text-stone-400">
-          <p className="font-semibold text-stone-800 dark:text-stone-200">Demo Testing Tip:</p>
-          <p className="mt-0.5">Register a new farmer or buyer account below, or use your existing credentials to log in.</p>
+        <div className="rounded-xl border border-dashed border-stone-300 bg-stone-100/80 p-3.5 text-xs text-stone-700 dark:border-stone-700 dark:bg-stone-800/90 dark:text-stone-200">
+          <p className="font-semibold text-stone-900 dark:text-stone-100">Demo Testing Tip:</p>
+          <p className="mt-1 text-stone-600 dark:text-stone-300">Register a new farmer or buyer account below, or use your existing credentials to log in.</p>
         </div>
 
         {/* Footer Link */}

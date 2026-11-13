@@ -29,3 +29,4 @@ echo  - AI YOLO Service:    http://localhost:8000/health
 echo  - MongoDB Database:   127.0.0.1:27017
 echo ======================================================================
 pause
+

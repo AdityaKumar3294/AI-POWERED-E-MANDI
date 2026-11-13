@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { ChevronRight, Package, User } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type { Order } from '@/types';
 import { formatCurrency, formatWeight, formatDate } from '@/lib/format';
 import { StatusBadge } from '@/components/ui/StatusBadge';
@@ -11,8 +12,9 @@ interface RecentOrdersTableProps {
 }
 
 export function RecentOrdersTable({ orders, role }: RecentOrdersTableProps) {
+  const { t } = useTranslation();
   const ordersPortalUrl = role === 'farmer' ? '/farmer/orders' : '/buyer/orders';
-  const counterpartyTitle = role === 'farmer' ? 'Buyer' : 'Farmer';
+  const counterpartyTitle = role === 'farmer' ? t('roles.buyer', 'Buyer') : t('roles.farmer', 'Farmer');
 
   if (!orders || orders.length === 0) {
     return (
@@ -44,7 +46,7 @@ export function RecentOrdersTable({ orders, role }: RecentOrdersTableProps) {
           to={ordersPortalUrl}
           className="inline-flex items-center gap-1 text-xs font-bold text-brand-700 hover:text-brand-800 dark:text-brand-400"
         >
-          <span>View All</span>
+          <span>{t('dashboard.viewAll', 'View All')}</span>
           <ChevronRight className="h-4 w-4" />
         </Link>
       </div>

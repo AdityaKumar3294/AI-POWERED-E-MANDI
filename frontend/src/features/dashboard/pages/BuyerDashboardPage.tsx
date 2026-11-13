@@ -10,6 +10,7 @@ import {
   MapPin, 
   CheckCircle2 
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useBuyerDashboard } from '../hooks';
 import { useAuthStore } from '@/stores/auth';
 import { AnimatedCounter } from '../components/AnimatedCounter';
@@ -20,6 +21,7 @@ import { Skeleton } from '@/components/ui/Skeleton';
 import { formatCurrency } from '@/lib/format';
 
 export default function BuyerDashboardPage() {
+  const { t } = useTranslation();
   const { user } = useAuthStore();
   const { data, isLoading, isError, refetch } = useBuyerDashboard();
 
@@ -66,7 +68,7 @@ export default function BuyerDashboardPage() {
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
           <h1 className="text-2xl font-black tracking-tight text-stone-900 sm:text-3xl dark:text-stone-100">
-            Welcome back, {user?.name || 'Wholesale Buyer'}
+            {t('dashboard.welcome', 'Welcome back')}, {user?.name || 'Wholesale Buyer'}
           </h1>
           <p className="mt-1 flex items-center gap-1.5 text-xs text-stone-500 dark:text-stone-400">
             <MapPin className="h-3.5 w-3.5 text-brand-600 dark:text-brand-400" />

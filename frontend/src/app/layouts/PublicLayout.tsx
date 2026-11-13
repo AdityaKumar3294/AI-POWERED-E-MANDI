@@ -1,12 +1,17 @@
+import { useState } from 'react';
 import { Outlet, Link, useNavigate } from 'react-router-dom';
-import { Sprout, ShoppingCart, LogIn, UserPlus, LayoutDashboard, LogOut } from 'lucide-react';
+import { Sprout, ShoppingCart, LogIn, UserPlus, LayoutDashboard, LogOut, User } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/auth';
 import { LanguageSwitcher } from '@/components/LanguageSwitcher';
 import { ThemeToggle } from '@/components/ThemeToggle';
+import { ProfileModal } from '@/components/ProfileModal';
 
 export function PublicLayout() {
   const { isAuthenticated, user, logout } = useAuthStore();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+  const [showProfile, setShowProfile] = useState(false);
 
   const handleLogout = () => {
     logout();
@@ -23,19 +28,19 @@ export function PublicLayout() {
             </div>
             <div>
               <span className="text-lg font-bold tracking-tight text-brand-800 dark:text-brand-400">
-                AI E-Mandi
+                {t('brand', 'AI E-Mandi')}
               </span>
               <span className="hidden text-xs text-stone-500 sm:inline sm:ml-2">ई-मंडी</span>
             </div>
           </Link>
 
-          <nav className="flex items-center gap-3 sm:gap-4">
+          <nav className="flex items-center gap-2 sm:gap-4">
             <Link
               to="/buyer/marketplace"
               className="touch-target inline-flex items-center gap-1.5 text-sm font-semibold text-stone-700 hover:text-brand-700 dark:text-stone-300 dark:hover:text-brand-400"
             >
               <ShoppingCart className="h-4 w-4" />
-              <span>Marketplace</span>
+              <span>{t('nav.marketplace', 'Marketplace')}</span>
             </Link>
 
             <LanguageSwitcher />
@@ -48,12 +53,20 @@ export function PublicLayout() {
                   className="touch-target inline-flex items-center gap-1.5 rounded-lg bg-brand-700 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-800 transition"
                 >
                   <LayoutDashboard className="h-4 w-4" />
-                  <span className="hidden sm:inline">Dashboard</span>
+                  <span className="hidden sm:inline">{t('nav.dashboard', 'Dashboard')}</span>
                 </Link>
+                <button
+                  type="button"
+                  onClick={() => setShowProfile(true)}
+                  className="touch-target inline-flex items-center justify-center rounded-lg p-2 text-stone-600 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800"
+                  title={t('common.profile', 'Profile')}
+                >
+                  <User className="h-5 w-5" />
+                </button>
                 <button
                   onClick={handleLogout}
                   className="touch-target inline-flex items-center justify-center rounded-lg p-2 text-stone-600 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-stone-800"
-                  title="Logout"
+                  title={t('common.logout', 'Logout')}
                 >
                   <LogOut className="h-5 w-5" />
                 </button>
@@ -65,14 +78,14 @@ export function PublicLayout() {
                   className="touch-target inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-semibold text-stone-700 hover:bg-stone-100 dark:text-stone-300 dark:hover:bg-stone-800 transition"
                 >
                   <LogIn className="h-4 w-4" />
-                  <span>Login</span>
+                  <span>{t('common.login', 'Login')}</span>
                 </Link>
                 <Link
                   to="/register"
                   className="touch-target hidden sm:inline-flex items-center gap-1.5 rounded-lg bg-brand-700 px-3.5 py-2 text-sm font-semibold text-white shadow-sm hover:bg-brand-800 transition"
                 >
                   <UserPlus className="h-4 w-4" />
-                  <span>Register</span>
+                  <span>{t('common.register', 'Register')}</span>
                 </Link>
               </div>
             )}
@@ -84,6 +97,8 @@ export function PublicLayout() {
         <Outlet />
       </main>
 
+      <ProfileModal open={showProfile} onClose={() => setShowProfile(false)} />
+
       <footer className="border-t border-stone-200 bg-white py-8 dark:border-stone-800 dark:bg-stone-900">
         <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
           <p className="text-sm text-stone-600 dark:text-stone-400">
@@ -94,4 +109,3 @@ export function PublicLayout() {
     </div>
   );
 }
-

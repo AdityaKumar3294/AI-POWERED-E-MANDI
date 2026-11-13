@@ -270,11 +270,9 @@ const getOrderById = async (req, res) => {
 
 // UPDATE ORDER STATUS
 const updateOrderStatus = async (req, res) => {
-  let session;
+  let session = null;
 
   try {
-    session = await mongoose.startSession();
-
     const { id } = req.params;
     const { status } = req.body;
 
@@ -295,8 +293,11 @@ const updateOrderStatus = async (req, res) => {
     const userId = req.user.userId;
     let updatedOrder;
 
-    await session.withTransaction(async () => {
-      const order = await Order.findById(id).session(session);
+    const performUpdate = async (sess) => {
+      const orderQuery = sess
+        ? Order.findById(id).session(sess)
+        : Order.findById(id);
+      const order = await orderQuery;
 
       if (!order) {
         fail(404, "Order not found");
@@ -338,8 +339,10 @@ const updateOrderStatus = async (req, res) => {
 
       // Rejected or cancelled pending orders return their reserved stock.
       if (["rejected", "cancelled"].includes(status)) {
-        const product = await Product.findById(order.productId)
-          .session(session);
+        const prodQuery = sess
+          ? Product.findById(order.productId).session(sess)
+          : Product.findById(order.productId);
+        const product = await prodQuery;
 
         if (product) {
           product.quantity += order.quantity;
@@ -352,15 +355,45 @@ const updateOrderStatus = async (req, res) => {
             product.status = "available";
           }
 
-          await product.save({ session });
+          if (sess) {
+            await product.save({ session: sess });
+          } else {
+            await product.save();
+          }
         }
       }
 
       order.status = status;
-      await order.save({ session });
+      if (sess) {
+        await order.save({ session: sess });
+      } else {
+        await order.save();
+      }
 
       updatedOrder = order;
-    });
+    };
+
+    // Attempt with transaction (for replica set), fallback to standalone if unsupported
+    try {
+      session = await mongoose.startSession();
+      await session.withTransaction(async () => {
+        await performUpdate(session);
+      });
+    } catch (txError) {
+      if (
+        txError.code === 20 ||
+        txError.codeName === "IllegalOperation" ||
+        (txError.message && txError.message.includes("replica set member"))
+      ) {
+        if (session) {
+          await session.endSession();
+          session = null;
+        }
+        await performUpdate(null);
+      } else {
+        throw txError;
+      }
+    }
 
     return res.status(200).json({
       success: true,

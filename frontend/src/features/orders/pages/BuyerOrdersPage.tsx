@@ -9,6 +9,7 @@ import {
   AlertCircle, 
   ArrowRight 
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useOrders, useUpdateOrderStatus } from '../hooks';
 import { OrderCard } from '../components/OrderCard';
 import { OrderDetailDrawer } from '../components/OrderDetailDrawer';
@@ -24,6 +25,7 @@ type FilterTab = 'all' | OrderStatus;
 
 export default function BuyerOrdersPage() {
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const { data, isLoading, isError, refetch } = useOrders();
   const updateStatusMutation = useUpdateOrderStatus();
   const [, startTransition] = useTransition();
@@ -103,7 +105,7 @@ export default function BuyerOrdersPage() {
 
   return (
     <div className="space-y-6">
-      <title>My Wholesale Purchases | AI E-Mandi Buyer Portal</title>
+      <title>{t('orders.buyerTitle', 'My Wholesale Purchases')} | {t('brand', 'AI E-Mandi')}</title>
       <meta
         name="description"
         content="Track your wholesale crop orders, verified AI quality consignments, and delivery status on AI-Powered E-Mandi."
@@ -113,10 +115,10 @@ export default function BuyerOrdersPage() {
       <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
         <div>
           <h1 className="text-2xl font-black tracking-tight text-stone-900 sm:text-3xl dark:text-stone-100">
-            My Wholesale Purchases
+            {t('orders.buyerTitle', 'My Wholesale Purchases')}
           </h1>
           <p className="mt-1 text-sm text-stone-600 dark:text-stone-400">
-            Track your wholesale produce lots, verify AI grade certificates, and monitor dispatch timelines.
+            {t('orders.buyerSubtitle', 'Track your wholesale produce lots, verify AI grade certificates, and monitor dispatch timelines.')}
           </p>
         </div>
 
@@ -124,7 +126,7 @@ export default function BuyerOrdersPage() {
           to="/buyer/marketplace"
           className="inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-brand-700 px-5 text-sm font-bold text-white shadow-sm transition-all hover:bg-brand-800 hover:shadow-md focus:ring-2 focus:ring-brand-500 focus:outline-hidden"
         >
-          <span>Explore Marketplace</span>
+          <span>{t('orders.exploreMarketplace', 'Explore Marketplace')}</span>
           <ArrowRight className="h-4 w-4" />
         </Link>
       </div>
@@ -134,7 +136,7 @@ export default function BuyerOrdersPage() {
         <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-xs dark:border-stone-800 dark:bg-stone-900">
           <div className="flex items-center gap-2 text-stone-500 dark:text-stone-400">
             <ShoppingBag className="h-4 w-4 text-brand-600 dark:text-brand-400" />
-            <span className="text-xs font-semibold uppercase tracking-wider">Total Purchases</span>
+            <span className="text-xs font-semibold uppercase tracking-wider">{t('orders.totalPurchases', 'Total Purchases')}</span>
           </div>
           <p className="mt-2 text-2xl font-black text-stone-900 dark:text-stone-100">
             {metrics.totalCount}
@@ -144,7 +146,7 @@ export default function BuyerOrdersPage() {
         <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-xs dark:border-stone-800 dark:bg-stone-900">
           <div className="flex items-center gap-2 text-stone-500 dark:text-stone-400">
             <Clock className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-            <span className="text-xs font-semibold uppercase tracking-wider">Awaiting Acceptance</span>
+            <span className="text-xs font-semibold uppercase tracking-wider">{t('orders.awaitingAcceptance', 'Awaiting Acceptance')}</span>
           </div>
           <p className="mt-2 text-2xl font-black text-amber-700 dark:text-amber-400">
             {metrics.pendingCount}
@@ -154,7 +156,7 @@ export default function BuyerOrdersPage() {
         <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-xs dark:border-stone-800 dark:bg-stone-900">
           <div className="flex items-center gap-2 text-stone-500 dark:text-stone-400">
             <Truck className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-            <span className="text-xs font-semibold uppercase tracking-wider">Confirmed Orders</span>
+            <span className="text-xs font-semibold uppercase tracking-wider">{t('orders.confirmedOrders', 'Confirmed Orders')}</span>
           </div>
           <p className="mt-2 text-2xl font-black text-blue-700 dark:text-blue-400">
             {metrics.confirmedCount}
@@ -164,7 +166,7 @@ export default function BuyerOrdersPage() {
         <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-xs dark:border-stone-800 dark:bg-stone-900">
           <div className="flex items-center gap-2 text-stone-500 dark:text-stone-400">
             <Coins className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-            <span className="text-xs font-semibold uppercase tracking-wider">Total Spent</span>
+            <span className="text-xs font-semibold uppercase tracking-wider">{t('orders.totalSpent', 'Total Spent')}</span>
           </div>
           <p className="mt-2 text-xl font-black text-brand-700 dark:text-brand-400">
             {formatCurrency(metrics.totalSpent)}
@@ -184,7 +186,7 @@ export default function BuyerOrdersPage() {
                 : 'bg-stone-100 text-stone-700 hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700'
             }`}
           >
-            All Purchases ({metrics.totalCount})
+            {t('orders.all', 'All')} ({metrics.totalCount})
           </button>
 
           <button
@@ -196,7 +198,7 @@ export default function BuyerOrdersPage() {
                 : 'bg-stone-100 text-stone-700 hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700'
             }`}
           >
-            🟡 Pending ({metrics.pendingCount})
+            🟡 {t('orders.pending', 'Pending')} ({metrics.pendingCount})
           </button>
 
           <button
@@ -208,7 +210,7 @@ export default function BuyerOrdersPage() {
                 : 'bg-stone-100 text-stone-700 hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700'
             }`}
           >
-            🔵 Confirmed ({metrics.confirmedCount})
+            🔵 {t('orders.confirmed', 'Confirmed')} ({metrics.confirmedCount})
           </button>
 
           <button
@@ -220,7 +222,7 @@ export default function BuyerOrdersPage() {
                 : 'bg-stone-100 text-stone-700 hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700'
             }`}
           >
-            🟢 Completed ({metrics.completedCount})
+            🟢 {t('orders.completed', 'Completed')} ({metrics.completedCount})
           </button>
 
           <button
@@ -232,7 +234,7 @@ export default function BuyerOrdersPage() {
                 : 'bg-stone-100 text-stone-700 hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700'
             }`}
           >
-            Cancelled ({metrics.cancelledCount})
+            {t('orders.cancelled', 'Cancelled')} ({metrics.cancelledCount})
           </button>
         </div>
 
@@ -242,7 +244,7 @@ export default function BuyerOrdersPage() {
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Search order #, produce, or farmer..."
+            placeholder={t('orders.searchPlaceholder', 'Search order #, produce, or farmer...')}
             className="h-11 w-full rounded-xl border border-stone-200 bg-stone-50 pl-10 pr-4 text-xs font-medium text-stone-900 placeholder-stone-400 focus:border-brand-500 focus:bg-white focus:ring-2 focus:ring-brand-500/20 focus:outline-hidden dark:border-stone-700 dark:bg-stone-800 dark:text-stone-100 dark:placeholder-stone-500"
           />
         </div>
@@ -267,7 +269,7 @@ export default function BuyerOrdersPage() {
         </div>
       ) : isError ? (
         <ErrorState
-          title="Failed to Load Purchases"
+          title={t('common.error', 'Failed to Load Purchases')}
           message="Could not retrieve your purchase orders from the mandi server. Please verify your connection."
           onRetry={refetch}
         />
@@ -275,10 +277,10 @@ export default function BuyerOrdersPage() {
         orders.length === 0 ? (
           <EmptyState
             icon={ShoppingBag}
-            title="No Purchases Yet"
-            description="You haven't placed any wholesale produce orders yet. Explore our marketplace for verified AI-graded crop lots."
+            title={t('orders.noOrdersFound', 'No Purchases Yet')}
+            description={t('orders.emptyBuyerMessage', "You haven't placed any wholesale produce orders yet. Explore our marketplace for verified AI-graded crop lots.")}
             action={{
-              label: 'Explore Produce Marketplace',
+              label: t('orders.exploreMarketplace', 'Explore Produce Marketplace'),
               onClick: () => navigate('/buyer/marketplace'),
             }}
           />
@@ -286,7 +288,7 @@ export default function BuyerOrdersPage() {
           <div className="flex flex-col items-center justify-center rounded-2xl border border-dashed border-stone-300 bg-white p-12 text-center dark:border-stone-700 dark:bg-stone-900">
             <AlertCircle className="h-12 w-12 text-stone-400" />
             <h3 className="mt-3 text-lg font-bold text-stone-800 dark:text-stone-200">
-              No matching orders found
+              {t('orders.noOrdersFound', 'No matching orders found')}
             </h3>
             <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
               Try adjusting your search query or selecting another status tab.
@@ -333,7 +335,7 @@ export default function BuyerOrdersPage() {
         description={pendingAction?.action.confirmDescription || ''}
         confirmLabel={
           updateStatusMutation.isPending
-            ? 'Updating...'
+            ? t('common.loading', 'Updating...')
             : pendingAction?.action.label || 'Confirm'
         }
         variant={pendingAction?.action.variant || 'primary'}

@@ -1,5 +1,6 @@
 import { useSearchParams } from 'react-router-dom';
 import { ShoppingCart } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 import { useProducts } from '../hooks';
 import { MarketplaceFilters } from '../components/MarketplaceFilters';
@@ -10,6 +11,7 @@ import { ErrorState } from '@/components/ui/ErrorState';
 import type { ProduceGrade } from '@/types';
 
 export default function MarketplacePage() {
+  const { t } = useTranslation();
   const [searchParams, setSearchParams] = useSearchParams();
 
   // Extract query filters from URL
@@ -41,16 +43,16 @@ export default function MarketplacePage() {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-2xl font-extrabold tracking-tight text-stone-900 sm:text-3xl dark:text-stone-100">
-              Produce Marketplace
+              {t('marketplace.title', 'Produce Marketplace')}
             </h1>
             {!isLoading && (
               <span className="rounded-full bg-brand-100 px-3 py-0.5 text-xs font-bold text-brand-800 dark:bg-brand-950 dark:text-brand-300">
-                {totalCount} {totalCount === 1 ? 'Lot' : 'Lots'} Available
+                {totalCount} {totalCount === 1 ? 'Lot' : 'Lots'} {t('marketplace.lotAvailable', 'Available')}
               </span>
             )}
           </div>
           <p className="mt-1 text-sm text-stone-600 dark:text-stone-400">
-            मंडी में उपलब्ध ताज़ा एवं सत्यापित कृषि उपज खरीदें
+            {t('marketplace.subtitle', 'Direct farm-to-buyer trade backed by YOLOv8 computer vision certificates')}
           </p>
         </div>
       </div>

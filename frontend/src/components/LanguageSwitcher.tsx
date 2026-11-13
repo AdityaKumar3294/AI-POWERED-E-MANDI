@@ -9,17 +9,17 @@ export function LanguageSwitcher() {
   };
 
   return (
-    <div className="relative inline-flex items-center gap-1">
-      <Languages className="h-4 w-4 text-stone-500" aria-hidden="true" />
+    <div className="relative inline-flex items-center gap-1.5">
+      <Languages className="h-4 w-4 text-stone-500 dark:text-stone-400" aria-hidden="true" />
       <select
         value={i18n.resolvedLanguage || 'en'}
         onChange={(e) => changeLanguage(e.target.value)}
         aria-label="Select language"
-        className="touch-target cursor-pointer rounded-md border border-stone-200 bg-transparent py-1 pl-2 pr-6 text-sm font-medium text-stone-700 hover:border-stone-400 focus:border-brand-700 focus:outline-none dark:border-stone-700 dark:text-stone-300 dark:hover:border-stone-600"
+        className="touch-target cursor-pointer rounded-lg border border-stone-300 bg-white py-1.5 pl-2.5 pr-7 text-xs font-semibold text-stone-800 shadow-2xs hover:border-stone-400 focus:border-brand-700 focus:outline-hidden dark:border-stone-700 dark:bg-stone-900 dark:text-stone-100 dark:hover:border-stone-600"
       >
-        <option value="en">English</option>
-        <option value="hi">हिंदी (Hindi)</option>
-        <option value="mr">मराठी (Marathi)</option>
+        <option value="en" className="bg-white text-stone-900 dark:bg-stone-900 dark:text-stone-100">English</option>
+        <option value="hi" className="bg-white text-stone-900 dark:bg-stone-900 dark:text-stone-100">हिंदी (Hindi)</option>
+        <option value="mr" className="bg-white text-stone-900 dark:bg-stone-900 dark:text-stone-100">मराठी (Marathi)</option>
       </select>
     </div>
   );

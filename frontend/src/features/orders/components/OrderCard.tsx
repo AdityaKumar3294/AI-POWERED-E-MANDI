@@ -9,6 +9,7 @@ import {
   Truck, 
   Ban 
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import type { Order, OrderStatus } from '@/types';
 import { formatCurrency, formatWeight, formatDate } from '@/lib/format';
 import { StatusBadge } from '@/components/ui/StatusBadge';
@@ -28,6 +29,7 @@ export function OrderCard({
   onViewDetails,
   onActionSelect,
 }: OrderCardProps) {
+  const { t } = useTranslation();
   // React 19 useOptimistic for responsive order status updates
   const [optimisticStatus] = useOptimistic(
     order.status,
@@ -36,13 +38,20 @@ export function OrderCard({
 
   const allowedActions = getAllowedOrderActions({ ...order, status: optimisticStatus }, role);
   const counterparty = role === 'farmer' ? order.buyerId : order.farmerId;
-  const counterpartyPrefix = role === 'farmer' ? 'Buyer' : 'Farmer';
+  const counterpartyPrefix = role === 'farmer' ? t('roles.buyer', 'Buyer') : t('roles.farmer', 'Farmer');
 
   const actionIcons = {
     accept: CheckCircle2,
     reject: XCircle,
     complete: Truck,
     cancel: Ban,
+  };
+
+  const actionLabels: Record<string, string> = {
+    accept: t('orders.acceptOrder', 'Accept Order'),
+    reject: t('orders.rejectOrder', 'Reject Order'),
+    complete: t('orders.completeOrder', 'Complete Order'),
+    cancel: t('orders.cancelOrder', 'Cancel Order'),
   };
 
   return (
@@ -76,7 +85,7 @@ export function OrderCard({
           </div>
 
           <div className="text-right">
-            <span className="text-xs text-stone-500 dark:text-stone-400">Total Lot Value</span>
+            <span className="text-xs text-stone-500 dark:text-stone-400">{t('orders.totalLotValue', 'Total Lot Value')}</span>
             <p className="text-base font-black text-brand-700 dark:text-brand-400">
               {formatCurrency(order.totalAmount)}
             </p>
@@ -87,7 +96,7 @@ export function OrderCard({
         <div className="mt-4 grid grid-cols-2 gap-2 rounded-xl bg-stone-50 p-2.5 text-xs text-stone-700 dark:bg-stone-800/60 dark:text-stone-300">
           <div className="flex items-center gap-1.5">
             <Scale className="h-4 w-4 text-brand-600 dark:text-brand-400" />
-            <span>Volume:</span>
+            <span>{t('common.quantity', 'Volume')}:</span>
             <strong className="text-stone-900 dark:text-stone-100">
               {formatWeight(order.quantity)}
             </strong>
@@ -116,7 +125,7 @@ export function OrderCard({
           onClick={() => onViewDetails(order)}
           className="inline-flex h-10 items-center gap-1 text-xs font-bold text-stone-700 hover:text-brand-700 dark:text-stone-300 dark:hover:text-brand-400"
         >
-          <span>View Details & Timeline</span>
+          <span>{t('orders.viewDetailsTimeline', 'View Details & Timeline')}</span>
           <ChevronRight className="h-4 w-4" />
         </button>
 
@@ -125,6 +134,7 @@ export function OrderCard({
           {allowedActions.map((action) => {
             const Icon = actionIcons[action.action];
             const isDanger = action.variant === 'danger';
+            const label = actionLabels[action.action] || action.label;
 
             return (
               <button
@@ -138,7 +148,7 @@ export function OrderCard({
                 }`}
               >
                 <Icon className="h-3.5 w-3.5" />
-                <span>{action.label}</span>
+                <span>{label}</span>
               </button>
             );
           })}
