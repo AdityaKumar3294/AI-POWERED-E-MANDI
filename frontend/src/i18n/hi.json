@@ -47,7 +47,12 @@
     "certificates": "प्रमाणपत्र",
     "myProduce": "मेरी उपज",
     "buyerPortal": "खरीदार पोर्टल",
-    "farmerPortal": "किसान पोर्टल"
+    "farmerPortal": "किसान पोर्टल",
+    "shortDashboard": "डैशबोर्ड",
+    "shortGrading": "ग्रेडिंग",
+    "shortCertificates": "सर्टिफिकेट",
+    "shortProduce": "उपज",
+    "shortOrders": "ऑर्डर"
   },
   "profile": {
     "title": "खाता प्रोफ़ाइल",

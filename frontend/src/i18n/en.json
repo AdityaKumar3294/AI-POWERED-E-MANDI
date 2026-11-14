@@ -47,7 +47,12 @@
     "certificates": "Certificates",
     "myProduce": "My Produce",
     "buyerPortal": "Buyer Portal",
-    "farmerPortal": "Farmer Portal"
+    "farmerPortal": "Farmer Portal",
+    "shortDashboard": "Home",
+    "shortGrading": "Grade",
+    "shortCertificates": "Certs",
+    "shortProduce": "Produce",
+    "shortOrders": "Orders"
   },
   "profile": {
     "title": "Account Profile",

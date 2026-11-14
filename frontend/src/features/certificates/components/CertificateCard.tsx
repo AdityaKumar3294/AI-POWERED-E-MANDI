@@ -109,9 +109,9 @@ export function CertificateCard({ certificate }: CertificateCardProps) {
         </div>
 
         {/* QR Code & Metrics Section */}
-        <div className="flex items-center gap-4 rounded-xl bg-stone-50 p-3.5 dark:bg-stone-850">
+        <div className="flex items-center gap-3 sm:gap-4 rounded-xl bg-stone-50 p-3.5 dark:bg-stone-850">
           {/* QR Code Thumbnail */}
-          <div className="relative flex h-20 w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-stone-200 bg-white p-1 dark:border-stone-700">
+          <div className="relative flex h-18 w-18 sm:h-20 sm:w-20 shrink-0 items-center justify-center overflow-hidden rounded-lg border border-stone-200 bg-white p-1 dark:border-stone-700">
             {certificate.qrCodeDataUrl ? (
               <img
                 src={certificate.qrCodeDataUrl}
@@ -124,7 +124,7 @@ export function CertificateCard({ certificate }: CertificateCardProps) {
           </div>
 
           {/* Key Metrics */}
-          <div className="flex-1 space-y-1 text-xs">
+          <div className="flex-1 space-y-1 text-xs min-w-0">
             <div className="flex items-center justify-between">
               <span className="text-stone-500">Defects:</span>
               <strong className="text-stone-900 dark:text-stone-100">
@@ -133,7 +133,7 @@ export function CertificateCard({ certificate }: CertificateCardProps) {
             </div>
             <div className="flex items-center justify-between">
               <span className="text-stone-500">Sample Count:</span>
-              <strong className="text-stone-900 dark:text-stone-100">
+              <strong className="text-stone-900 dark:text-stone-100 truncate ml-1">
                 {certificate.healthyProduce} / {certificate.totalProduce}
               </strong>
             </div>
@@ -148,7 +148,7 @@ export function CertificateCard({ certificate }: CertificateCardProps) {
 
         {/* Public Verify URL preview */}
         <div className="flex items-center justify-between rounded-lg bg-emerald-50/60 px-3 py-1.5 text-xs text-emerald-800 dark:bg-emerald-950/40 dark:text-emerald-300">
-          <span className="truncate max-w-[200px] font-mono opacity-80">{verifyUrl}</span>
+          <span className="truncate max-w-[130px] sm:max-w-[200px] font-mono opacity-80">{verifyUrl}</span>
           <Link
             to={`/verify/${encodeURIComponent(certificate.certificateId)}`}
             target="_blank"

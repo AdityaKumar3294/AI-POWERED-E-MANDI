@@ -68,10 +68,10 @@ export function GradingMetricsCard({ result, className = '' }: GradingMetricsCar
         {/* Total Detected */}
         <div className="rounded-xl border border-stone-100 bg-stone-50 p-3 dark:border-stone-800 dark:bg-stone-850">
           <div className="flex items-center gap-1.5 text-xs font-semibold text-stone-500">
-            <BarChart3 className="h-3.5 w-3.5 text-stone-400" />
-            <span>Total Inspected</span>
+            <BarChart3 className="h-3.5 w-3.5 text-stone-400 shrink-0" />
+            <span className="truncate">Total Inspected</span>
           </div>
-          <p className="mt-1 text-2xl font-black text-stone-900 dark:text-stone-100">
+          <p className="mt-1 text-xl sm:text-2xl font-black text-stone-900 dark:text-stone-100 truncate">
             {result.total}
           </p>
         </div>
@@ -79,10 +79,10 @@ export function GradingMetricsCard({ result, className = '' }: GradingMetricsCar
         {/* Healthy Fresh */}
         <div className="rounded-xl border border-emerald-100 bg-emerald-50/70 p-3 dark:border-emerald-900/50 dark:bg-emerald-950/30">
           <div className="flex items-center gap-1.5 text-xs font-semibold text-emerald-800 dark:text-emerald-300">
-            <CheckCircle className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400" />
-            <span>Fresh Count</span>
+            <CheckCircle className="h-3.5 w-3.5 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <span className="truncate">Fresh Count</span>
           </div>
-          <p className="mt-1 text-2xl font-black text-emerald-800 dark:text-emerald-300">
+          <p className="mt-1 text-xl sm:text-2xl font-black text-emerald-800 dark:text-emerald-300 truncate">
             {result.healthy}
           </p>
         </div>
@@ -90,10 +90,10 @@ export function GradingMetricsCard({ result, className = '' }: GradingMetricsCar
         {/* Defective Rotten */}
         <div className="rounded-xl border border-red-100 bg-red-50/70 p-3 dark:border-red-900/50 dark:bg-red-950/30">
           <div className="flex items-center gap-1.5 text-xs font-semibold text-red-800 dark:text-red-300">
-            <AlertTriangle className="h-3.5 w-3.5 text-red-600 dark:text-red-400" />
-            <span>Rotten Count</span>
+            <AlertTriangle className="h-3.5 w-3.5 text-red-600 dark:text-red-400 shrink-0" />
+            <span className="truncate">Rotten Count</span>
           </div>
-          <p className="mt-1 text-2xl font-black text-red-700 dark:text-red-300">
+          <p className="mt-1 text-xl sm:text-2xl font-black text-red-700 dark:text-red-300 truncate">
             {result.defective}
           </p>
         </div>
@@ -101,10 +101,10 @@ export function GradingMetricsCard({ result, className = '' }: GradingMetricsCar
         {/* Average Size */}
         <div className="rounded-xl border border-stone-100 bg-stone-50 p-3 dark:border-stone-800 dark:bg-stone-850">
           <div className="flex items-center gap-1.5 text-xs font-semibold text-stone-500">
-            <Award className="h-3.5 w-3.5 text-stone-400" />
-            <span>Average Size</span>
+            <Award className="h-3.5 w-3.5 text-stone-400 shrink-0" />
+            <span className="truncate">Average Size</span>
           </div>
-          <p className="mt-1 text-2xl font-black capitalize text-stone-900 dark:text-stone-100">
+          <p className="mt-1 text-xl sm:text-2xl font-black capitalize text-stone-900 dark:text-stone-100 truncate">
             {result.averageSize || 'Medium'}
           </p>
         </div>

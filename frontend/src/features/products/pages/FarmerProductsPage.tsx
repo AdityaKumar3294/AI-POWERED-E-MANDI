@@ -90,7 +90,7 @@ export default function FarmerProductsPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-2">
+        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
           <Link
             to="/farmer/grading"
             className="inline-flex h-11 items-center justify-center gap-2 rounded-xl border border-brand-200 bg-brand-50 px-4 text-sm font-bold text-brand-700 transition-colors hover:bg-brand-100 focus:ring-2 focus:ring-brand-500/20 dark:border-brand-900 dark:bg-brand-950/50 dark:text-brand-300"
@@ -111,42 +111,42 @@ export default function FarmerProductsPage() {
 
       {/* Summary KPI Strip */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-        <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-xs dark:border-stone-800 dark:bg-stone-900">
+        <div className="rounded-2xl border border-stone-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-stone-800 dark:bg-stone-900">
           <div className="flex items-center gap-2 text-stone-500 dark:text-stone-400">
-            <Package className="h-4 w-4 text-brand-600 dark:text-brand-400" />
-            <span className="text-xs font-semibold uppercase tracking-wider">Total Listings</span>
+            <Package className="h-4 w-4 text-brand-600 dark:text-brand-400 shrink-0" />
+            <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider truncate">Total Listings</span>
           </div>
-          <p className="mt-2 text-2xl font-black text-stone-900 dark:text-stone-100">
+          <p className="mt-2 text-xl sm:text-2xl font-black text-stone-900 dark:text-stone-100 truncate">
             {metrics.totalCount}
           </p>
         </div>
 
-        <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-xs dark:border-stone-800 dark:bg-stone-900">
+        <div className="rounded-2xl border border-stone-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-stone-800 dark:bg-stone-900">
           <div className="flex items-center gap-2 text-stone-500 dark:text-stone-400">
-            <Store className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-            <span className="text-xs font-semibold uppercase tracking-wider">Active Lots</span>
+            <Store className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider truncate">Active Lots</span>
           </div>
-          <p className="mt-2 text-2xl font-black text-emerald-700 dark:text-emerald-400">
+          <p className="mt-2 text-xl sm:text-2xl font-black text-emerald-700 dark:text-emerald-400 truncate">
             {metrics.availableCount}
           </p>
         </div>
 
-        <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-xs dark:border-stone-800 dark:bg-stone-900">
+        <div className="rounded-2xl border border-stone-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-stone-800 dark:bg-stone-900">
           <div className="flex items-center gap-2 text-stone-500 dark:text-stone-400">
-            <Scale className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-            <span className="text-xs font-semibold uppercase tracking-wider">Total Inventory</span>
+            <Scale className="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0" />
+            <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider truncate">Total Inventory</span>
           </div>
-          <p className="mt-2 text-2xl font-black text-stone-900 dark:text-stone-100">
+          <p className="mt-2 text-xl sm:text-2xl font-black text-stone-900 dark:text-stone-100 truncate">
             {formatWeight(metrics.totalWeightKg)}
           </p>
         </div>
 
-        <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-xs dark:border-stone-800 dark:bg-stone-900">
+        <div className="rounded-2xl border border-stone-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-stone-800 dark:bg-stone-900">
           <div className="flex items-center gap-2 text-stone-500 dark:text-stone-400">
-            <ShieldCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-            <span className="text-xs font-semibold uppercase tracking-wider">AI Certified</span>
+            <ShieldCheck className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider truncate">AI Certified</span>
           </div>
-          <p className="mt-2 text-2xl font-black text-brand-700 dark:text-brand-400">
+          <p className="mt-2 text-xl sm:text-2xl font-black text-brand-700 dark:text-brand-400 truncate">
             {metrics.certifiedCount}
           </p>
         </div>
@@ -155,11 +155,11 @@ export default function FarmerProductsPage() {
       {/* Filter and Search Bar */}
       <div className="flex flex-col gap-3 rounded-2xl border border-stone-200 bg-white p-3 shadow-xs md:flex-row md:items-center md:justify-between dark:border-stone-800 dark:bg-stone-900">
         {/* Status Filter Tabs */}
-        <div className="flex flex-wrap items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 whitespace-nowrap">
           <button
             type="button"
             onClick={() => setActiveTab('all')}
-            className={`min-h-[44px] rounded-xl px-4 py-2 text-xs font-bold transition-colors ${
+            className={`min-h-[44px] shrink-0 rounded-xl px-4 py-2 text-xs font-bold transition-colors ${
               activeTab === 'all'
                 ? 'bg-brand-700 text-white shadow-xs'
                 : 'bg-stone-100 text-stone-700 hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700'
@@ -171,7 +171,7 @@ export default function FarmerProductsPage() {
           <button
             type="button"
             onClick={() => setActiveTab('available')}
-            className={`min-h-[44px] rounded-xl px-4 py-2 text-xs font-bold transition-colors ${
+            className={`min-h-[44px] shrink-0 rounded-xl px-4 py-2 text-xs font-bold transition-colors ${
               activeTab === 'available'
                 ? 'bg-emerald-600 text-white shadow-xs'
                 : 'bg-stone-100 text-stone-700 hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700'
@@ -183,7 +183,7 @@ export default function FarmerProductsPage() {
           <button
             type="button"
             onClick={() => setActiveTab('sold_out')}
-            className={`min-h-[44px] rounded-xl px-4 py-2 text-xs font-bold transition-colors ${
+            className={`min-h-[44px] shrink-0 rounded-xl px-4 py-2 text-xs font-bold transition-colors ${
               activeTab === 'sold_out'
                 ? 'bg-stone-700 text-white shadow-xs'
                 : 'bg-stone-100 text-stone-700 hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700'
@@ -195,7 +195,7 @@ export default function FarmerProductsPage() {
           <button
             type="button"
             onClick={() => setActiveTab('inactive')}
-            className={`min-h-[44px] rounded-xl px-4 py-2 text-xs font-bold transition-colors ${
+            className={`min-h-[44px] shrink-0 rounded-xl px-4 py-2 text-xs font-bold transition-colors ${
               activeTab === 'inactive'
                 ? 'bg-amber-600 text-white shadow-xs'
                 : 'bg-stone-100 text-stone-700 hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700'
@@ -206,7 +206,7 @@ export default function FarmerProductsPage() {
         </div>
 
         {/* Search Input */}
-        <div className="relative min-w-[240px] md:max-w-xs">
+        <div className="relative w-full md:w-72 shrink-0">
           <Search className="absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-stone-400" />
           <input
             type="text"

@@ -133,42 +133,42 @@ export default function BuyerOrdersPage() {
 
       {/* KPI Stats Strip */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-        <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-xs dark:border-stone-800 dark:bg-stone-900">
+        <div className="rounded-2xl border border-stone-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-stone-800 dark:bg-stone-900">
           <div className="flex items-center gap-2 text-stone-500 dark:text-stone-400">
-            <ShoppingBag className="h-4 w-4 text-brand-600 dark:text-brand-400" />
-            <span className="text-xs font-semibold uppercase tracking-wider">{t('orders.totalPurchases', 'Total Purchases')}</span>
+            <ShoppingBag className="h-4 w-4 text-brand-600 dark:text-brand-400 shrink-0" />
+            <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider truncate">{t('orders.totalPurchases', 'Total Purchases')}</span>
           </div>
-          <p className="mt-2 text-2xl font-black text-stone-900 dark:text-stone-100">
+          <p className="mt-2 text-xl sm:text-2xl font-black text-stone-900 dark:text-stone-100 truncate">
             {metrics.totalCount}
           </p>
         </div>
 
-        <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-xs dark:border-stone-800 dark:bg-stone-900">
+        <div className="rounded-2xl border border-stone-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-stone-800 dark:bg-stone-900">
           <div className="flex items-center gap-2 text-stone-500 dark:text-stone-400">
-            <Clock className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-            <span className="text-xs font-semibold uppercase tracking-wider">{t('orders.awaitingAcceptance', 'Awaiting Acceptance')}</span>
+            <Clock className="h-4 w-4 text-amber-600 dark:text-amber-400 shrink-0" />
+            <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider truncate">{t('orders.awaitingAcceptance', 'Awaiting Acceptance')}</span>
           </div>
-          <p className="mt-2 text-2xl font-black text-amber-700 dark:text-amber-400">
+          <p className="mt-2 text-xl sm:text-2xl font-black text-amber-700 dark:text-amber-400 truncate">
             {metrics.pendingCount}
           </p>
         </div>
 
-        <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-xs dark:border-stone-800 dark:bg-stone-900">
+        <div className="rounded-2xl border border-stone-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-stone-800 dark:bg-stone-900">
           <div className="flex items-center gap-2 text-stone-500 dark:text-stone-400">
-            <Truck className="h-4 w-4 text-blue-600 dark:text-blue-400" />
-            <span className="text-xs font-semibold uppercase tracking-wider">{t('orders.confirmedOrders', 'Confirmed Orders')}</span>
+            <Truck className="h-4 w-4 text-blue-600 dark:text-blue-400 shrink-0" />
+            <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider truncate">{t('orders.confirmedOrders', 'Confirmed Orders')}</span>
           </div>
-          <p className="mt-2 text-2xl font-black text-blue-700 dark:text-blue-400">
+          <p className="mt-2 text-xl sm:text-2xl font-black text-blue-700 dark:text-blue-400 truncate">
             {metrics.confirmedCount}
           </p>
         </div>
 
-        <div className="rounded-2xl border border-stone-200 bg-white p-4 shadow-xs dark:border-stone-800 dark:bg-stone-900">
+        <div className="rounded-2xl border border-stone-200 bg-white p-3.5 sm:p-4 shadow-xs dark:border-stone-800 dark:bg-stone-900">
           <div className="flex items-center gap-2 text-stone-500 dark:text-stone-400">
-            <Coins className="h-4 w-4 text-emerald-600 dark:text-emerald-400" />
-            <span className="text-xs font-semibold uppercase tracking-wider">{t('orders.totalSpent', 'Total Spent')}</span>
+            <Coins className="h-4 w-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+            <span className="text-[11px] sm:text-xs font-semibold uppercase tracking-wider truncate">{t('orders.totalSpent', 'Total Spent')}</span>
           </div>
-          <p className="mt-2 text-xl font-black text-brand-700 dark:text-brand-400">
+          <p className="mt-2 text-lg sm:text-xl font-black text-brand-700 dark:text-brand-400 truncate">
             {formatCurrency(metrics.totalSpent)}
           </p>
         </div>
@@ -176,11 +176,11 @@ export default function BuyerOrdersPage() {
 
       {/* Filter Tabs and Search Bar */}
       <div className="flex flex-col gap-3 rounded-2xl border border-stone-200 bg-white p-3 shadow-xs md:flex-row md:items-center md:justify-between dark:border-stone-800 dark:bg-stone-900">
-        <div className="flex flex-wrap items-center gap-1.5 overflow-x-auto pb-1 md:pb-0">
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 md:pb-0 whitespace-nowrap">
           <button
             type="button"
             onClick={() => setActiveTab('all')}
-            className={`min-h-[44px] rounded-xl px-4 py-2 text-xs font-bold transition-colors ${
+            className={`min-h-[44px] shrink-0 rounded-xl px-3.5 py-2 text-xs font-bold transition-colors ${
               activeTab === 'all'
                 ? 'bg-brand-700 text-white shadow-xs'
                 : 'bg-stone-100 text-stone-700 hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700'
@@ -192,7 +192,7 @@ export default function BuyerOrdersPage() {
           <button
             type="button"
             onClick={() => setActiveTab('pending')}
-            className={`min-h-[44px] rounded-xl px-4 py-2 text-xs font-bold transition-colors ${
+            className={`min-h-[44px] shrink-0 rounded-xl px-3.5 py-2 text-xs font-bold transition-colors ${
               activeTab === 'pending'
                 ? 'bg-amber-600 text-white shadow-xs'
                 : 'bg-stone-100 text-stone-700 hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700'
@@ -204,7 +204,7 @@ export default function BuyerOrdersPage() {
           <button
             type="button"
             onClick={() => setActiveTab('confirmed')}
-            className={`min-h-[44px] rounded-xl px-4 py-2 text-xs font-bold transition-colors ${
+            className={`min-h-[44px] shrink-0 rounded-xl px-3.5 py-2 text-xs font-bold transition-colors ${
               activeTab === 'confirmed'
                 ? 'bg-blue-600 text-white shadow-xs'
                 : 'bg-stone-100 text-stone-700 hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700'
@@ -216,7 +216,7 @@ export default function BuyerOrdersPage() {
           <button
             type="button"
             onClick={() => setActiveTab('completed')}
-            className={`min-h-[44px] rounded-xl px-4 py-2 text-xs font-bold transition-colors ${
+            className={`min-h-[44px] shrink-0 rounded-xl px-3.5 py-2 text-xs font-bold transition-colors ${
               activeTab === 'completed'
                 ? 'bg-emerald-600 text-white shadow-xs'
                 : 'bg-stone-100 text-stone-700 hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700'
@@ -228,7 +228,7 @@ export default function BuyerOrdersPage() {
           <button
             type="button"
             onClick={() => setActiveTab('cancelled')}
-            className={`min-h-[44px] rounded-xl px-4 py-2 text-xs font-bold transition-colors ${
+            className={`min-h-[44px] shrink-0 rounded-xl px-3.5 py-2 text-xs font-bold transition-colors ${
               activeTab === 'cancelled'
                 ? 'bg-stone-700 text-white shadow-xs'
                 : 'bg-stone-100 text-stone-700 hover:bg-stone-200 dark:bg-stone-800 dark:text-stone-300 dark:hover:bg-stone-700'
@@ -238,7 +238,7 @@ export default function BuyerOrdersPage() {
           </button>
         </div>
 
-        <div className="relative min-w-[240px] md:max-w-xs">
+        <div className="relative w-full md:w-72 shrink-0">
           <Search className="absolute top-1/2 left-3.5 h-4 w-4 -translate-y-1/2 text-stone-400" />
           <input
             type="text"

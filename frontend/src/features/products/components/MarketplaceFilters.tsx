@@ -145,7 +145,7 @@ export function MarketplaceFilters() {
         </div>
 
         {/* Sort Dropdown */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 w-full sm:w-auto">
           <ArrowUpDown className="h-4 w-4 text-stone-500 shrink-0" />
           <select
             value={
@@ -159,7 +159,7 @@ export function MarketplaceFilters() {
             }
             onChange={handleSortChange}
             aria-label="Sort listings"
-            className="touch-target cursor-pointer rounded-xl border border-stone-300 bg-white py-2.5 pl-3 pr-8 text-sm font-semibold text-stone-800 focus:border-brand-700 focus:outline-none dark:border-stone-700 dark:bg-stone-800 dark:text-stone-100"
+            className="touch-target cursor-pointer rounded-xl border border-stone-300 bg-white py-2.5 pl-3 pr-8 text-sm font-semibold text-stone-800 focus:border-brand-700 focus:outline-none dark:border-stone-700 dark:bg-stone-800 dark:text-stone-100 w-full sm:w-auto"
           >
             <option value="newest" className="bg-white text-stone-900 dark:bg-stone-900 dark:text-stone-100">{t('marketplace.newest', 'Newest First')}</option>
             <option value="price_asc" className="bg-white text-stone-900 dark:bg-stone-900 dark:text-stone-100">{t('marketplace.priceAsc', 'Price: Low to High')}</option>
@@ -170,7 +170,7 @@ export function MarketplaceFilters() {
       </div>
 
       {/* Middle Row: Grade Filter Chips & Price Filter */}
-      <div className="flex flex-wrap items-center justify-between gap-3 border-t border-stone-100 pt-3 dark:border-stone-800">
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-t border-stone-100 pt-3 dark:border-stone-800">
         {/* Grade Chips */}
         <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
           <span className="text-xs font-semibold text-stone-500 dark:text-stone-400 mr-1">
@@ -196,8 +196,8 @@ export function MarketplaceFilters() {
         </div>
 
         {/* Price Range Filter */}
-        <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-2 w-full sm:w-auto justify-between sm:justify-end">
+          <div className="flex items-center gap-1.5 flex-1 sm:flex-none">
             <input
               type="number"
               min="0"
@@ -205,7 +205,7 @@ export function MarketplaceFilters() {
               value={minPrice}
               onChange={(e) => setMinPrice(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handlePriceApply()}
-              className="touch-target w-20 rounded-xl border border-stone-300 bg-stone-50/50 px-2.5 py-1.5 text-xs text-stone-900 focus:border-brand-700 focus:bg-white focus:outline-none dark:border-stone-700 dark:bg-stone-800 dark:focus:bg-stone-800 dark:text-stone-100"
+              className="touch-target w-full sm:w-20 rounded-xl border border-stone-300 bg-stone-50/50 px-2.5 py-1.5 text-xs text-stone-900 focus:border-brand-700 focus:bg-white focus:outline-none dark:border-stone-700 dark:bg-stone-800 dark:focus:bg-stone-800 dark:text-stone-100"
             />
             <span className="text-stone-400">-</span>
             <input
@@ -215,13 +215,13 @@ export function MarketplaceFilters() {
               value={maxPrice}
               onChange={(e) => setMaxPrice(e.target.value)}
               onKeyDown={(e) => e.key === 'Enter' && handlePriceApply()}
-              className="touch-target w-20 rounded-xl border border-stone-300 bg-stone-50/50 px-2.5 py-1.5 text-xs text-stone-900 focus:border-brand-700 focus:bg-white focus:outline-none dark:border-stone-700 dark:bg-stone-800 dark:focus:bg-stone-800 dark:text-stone-100"
+              className="touch-target w-full sm:w-20 rounded-xl border border-stone-300 bg-stone-50/50 px-2.5 py-1.5 text-xs text-stone-900 focus:border-brand-700 focus:bg-white focus:outline-none dark:border-stone-700 dark:bg-stone-800 dark:focus:bg-stone-800 dark:text-stone-100"
             />
           </div>
           <button
             type="button"
             onClick={handlePriceApply}
-            className="touch-target rounded-xl bg-stone-800 px-3 py-1.5 text-xs font-bold text-white hover:bg-stone-900 dark:bg-stone-700 dark:hover:bg-stone-600 transition"
+            className="touch-target shrink-0 rounded-xl bg-stone-800 px-3 py-1.5 text-xs font-bold text-white hover:bg-stone-900 dark:bg-stone-700 dark:hover:bg-stone-600 transition"
           >
             {t('common.filter', 'Filter')}
           </button>

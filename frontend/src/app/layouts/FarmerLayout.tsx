@@ -31,11 +31,11 @@ export function FarmerLayout() {
   };
 
   const navLinks = [
-    { to: '/farmer/dashboard', label: t('nav.dashboard', 'Dashboard'), icon: LayoutDashboard },
-    { to: '/farmer/grading', label: t('nav.cropGrading', 'AI Crop Grading'), icon: Camera },
-    { to: '/farmer/certificates', label: t('nav.certificates', 'Quality Certs'), icon: Award },
-    { to: '/farmer/products', label: t('nav.myProduce', 'My Produce'), icon: Package },
-    { to: '/farmer/orders', label: t('nav.myOrders', 'Orders'), icon: ShoppingBag },
+    { to: '/farmer/dashboard', label: t('nav.dashboard', 'Dashboard'), shortLabel: t('nav.shortDashboard', 'Home'), icon: LayoutDashboard },
+    { to: '/farmer/grading', label: t('nav.cropGrading', 'AI Crop Grading'), shortLabel: t('nav.shortGrading', 'Grade'), icon: Camera },
+    { to: '/farmer/certificates', label: t('nav.certificates', 'Quality Certs'), shortLabel: t('nav.shortCertificates', 'Certs'), icon: Award },
+    { to: '/farmer/products', label: t('nav.myProduce', 'My Produce'), shortLabel: t('nav.shortProduce', 'Produce'), icon: Package },
+    { to: '/farmer/orders', label: t('nav.myOrders', 'Orders'), shortLabel: t('nav.shortOrders', 'Orders'), icon: ShoppingBag },
   ];
 
   return (
@@ -43,16 +43,16 @@ export function FarmerLayout() {
       {/* Top Header */}
       <header className="sticky top-0 z-40 border-b border-stone-200 bg-white/95 backdrop-blur-md dark:border-stone-800 dark:bg-stone-900/95">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3 shrink-0">
             <Link to="/farmer/dashboard" className="flex items-center gap-2">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-700 text-white shadow-sm">
-                <Sprout className="h-6 w-6" />
+              <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-brand-700 text-white shadow-sm shrink-0">
+                <Sprout className="h-5 w-5 sm:h-6 sm:w-6" />
               </div>
               <div className="flex flex-col">
-                <span className="text-base font-bold text-brand-800 dark:text-brand-400">
+                <span className="text-sm sm:text-base font-bold text-brand-800 dark:text-brand-400 leading-tight">
                   {t('brand', 'AI E-Mandi')}
                 </span>
-                <span className="text-[11px] font-semibold tracking-wider text-emerald-600 uppercase dark:text-emerald-400">
+                <span className="text-[10px] sm:text-[11px] font-semibold tracking-wider text-emerald-600 uppercase dark:text-emerald-400">
                   {t('nav.farmerPortal', 'Farmer Portal')}
                 </span>
               </div>
@@ -189,7 +189,7 @@ export function FarmerLayout() {
       <ProfileModal open={showProfile} onClose={() => setShowProfile(false)} />
 
       {/* Bottom Sticky Mobile Tab Bar (For 360px Android devices) */}
-      <nav className="fixed bottom-0 left-0 right-0 z-40 flex h-16 border-t border-stone-200 bg-white dark:border-stone-800 dark:bg-stone-900 md:hidden">
+      <nav className="fixed bottom-0 left-0 right-0 z-40 flex h-16 border-t border-stone-200 bg-white/95 backdrop-blur-md dark:border-stone-800 dark:bg-stone-900/95 md:hidden">
         {navLinks.map((item) => {
           const Icon = item.icon;
           return (
@@ -197,25 +197,25 @@ export function FarmerLayout() {
               key={item.to}
               to={item.to}
               className={({ isActive }) =>
-                `flex flex-1 flex-col items-center justify-center py-1 transition ${
+                `flex flex-1 flex-col items-center justify-center py-1 transition min-w-0 ${
                   isActive
                     ? 'text-brand-700 dark:text-brand-400 font-bold'
                     : 'text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-200'
                 }`
               }
             >
-              <Icon className="h-5 w-5" />
-              <span className="text-[10px] mt-0.5 tracking-tight">{item.label.split(' ')[0]}</span>
+              <Icon className="h-5 w-5 shrink-0" />
+              <span className="text-[10px] mt-0.5 tracking-tight truncate max-w-[56px] text-center">{item.shortLabel || item.label}</span>
             </NavLink>
           );
         })}
         <button
           type="button"
           onClick={() => setShowProfile(true)}
-          className="flex flex-1 flex-col items-center justify-center py-1 text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-200"
+          className="flex flex-1 flex-col items-center justify-center py-1 text-stone-500 hover:text-stone-900 dark:text-stone-400 dark:hover:text-stone-200 min-w-0"
         >
-          <User className="h-5 w-5" />
-          <span className="text-[10px] mt-0.5 tracking-tight">{t('common.profile', 'Profile')}</span>
+          <User className="h-5 w-5 shrink-0" />
+          <span className="text-[10px] mt-0.5 tracking-tight truncate max-w-[56px] text-center">{t('common.profile', 'Profile')}</span>
         </button>
       </nav>
     </div>

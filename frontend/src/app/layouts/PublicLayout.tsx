@@ -22,25 +22,25 @@ export function PublicLayout() {
     <div className="flex min-h-screen flex-col bg-stone-50 dark:bg-stone-950">
       <header className="sticky top-0 z-40 border-b border-stone-200 bg-white/90 backdrop-blur-md dark:border-stone-800 dark:bg-stone-900/90">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <Link to="/" className="flex items-center gap-2.5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-700 text-white shadow-sm">
-              <Sprout className="h-6 w-6" />
+          <Link to="/" className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+            <div className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl bg-brand-700 text-white shadow-sm shrink-0">
+              <Sprout className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
             <div>
-              <span className="text-lg font-bold tracking-tight text-brand-800 dark:text-brand-400">
+              <span className="text-base sm:text-lg font-bold tracking-tight text-brand-800 dark:text-brand-400">
                 {t('brand', 'AI E-Mandi')}
               </span>
               <span className="hidden text-xs text-stone-500 sm:inline sm:ml-2">ई-मंडी</span>
             </div>
           </Link>
 
-          <nav className="flex items-center gap-2 sm:gap-4">
+          <nav className="flex items-center gap-1.5 sm:gap-3">
             <Link
               to="/buyer/marketplace"
               className="touch-target inline-flex items-center gap-1.5 text-sm font-semibold text-stone-700 hover:text-brand-700 dark:text-stone-300 dark:hover:text-brand-400"
             >
-              <ShoppingCart className="h-4 w-4" />
-              <span>{t('nav.marketplace', 'Marketplace')}</span>
+              <ShoppingCart className="h-4 w-4 shrink-0" />
+              <span className="hidden sm:inline">{t('nav.marketplace', 'Marketplace')}</span>
             </Link>
 
             <LanguageSwitcher />

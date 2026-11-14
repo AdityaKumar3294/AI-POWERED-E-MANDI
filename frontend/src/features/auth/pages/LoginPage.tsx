@@ -76,7 +76,7 @@ export default function LoginPage() {
       <title>{t('auth.signInTitle', 'Sign In to E-Mandi')} | {t('brand', 'AI E-Mandi')}</title>
       <meta name="description" content="Log in to access your AI E-Mandi farmer or buyer portal." />
 
-      <div className="w-full max-w-md space-y-8 rounded-2xl border border-stone-200 bg-white p-6 shadow-xl sm:p-8 dark:border-stone-800 dark:bg-stone-900">
+      <div className="w-full max-w-md space-y-6 sm:space-y-8 rounded-2xl border border-stone-200 bg-white p-5 shadow-xl sm:p-8 dark:border-stone-800 dark:bg-stone-900">
         {/* Header */}
         <div className="text-center">
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-700 text-white shadow-md">

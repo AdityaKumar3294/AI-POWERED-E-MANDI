@@ -51,7 +51,54 @@ export function RecentOrdersTable({ orders, role }: RecentOrdersTableProps) {
         </Link>
       </div>
 
-      <div className="overflow-x-auto">
+      {/* Mobile Card List View (< sm) */}
+      <div className="divide-y divide-stone-200 dark:divide-stone-800 sm:hidden">
+        {orders.map((order) => {
+          const counterparty = role === 'farmer' ? order.buyerId : order.farmerId;
+          return (
+            <Link
+              key={order._id}
+              to={ordersPortalUrl}
+              className="block p-4 transition-colors hover:bg-stone-50/80 dark:hover:bg-stone-800/40"
+            >
+              <div className="flex items-center justify-between gap-2">
+                <span className="font-mono text-xs font-bold text-stone-900 dark:text-stone-100">
+                  #{order._id.slice(-6).toUpperCase()}
+                </span>
+                <StatusBadge status={order.status} />
+              </div>
+
+              <div className="mt-2.5 flex items-center justify-between gap-2">
+                <div className="flex items-center gap-2 min-w-0">
+                  <GradePill grade={order.productId?.grade || 'A'} size="sm" />
+                  <span className="truncate text-sm font-bold text-stone-900 dark:text-stone-100">
+                    {order.productId?.name || 'Produce'}
+                  </span>
+                </div>
+                <span className="text-xs text-stone-500 shrink-0">
+                  {formatDate(order.createdAt)}
+                </span>
+              </div>
+
+              <div className="mt-2.5 flex items-center justify-between border-t border-stone-100 pt-2 text-xs text-stone-600 dark:border-stone-800/80 dark:text-stone-400">
+                <div className="flex items-center gap-1.5 truncate max-w-[160px]">
+                  <User className="h-3.5 w-3.5 text-stone-400 shrink-0" />
+                  <span className="truncate">{counterparty?.name || 'Authorized User'}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span>{formatWeight(order.quantity)}</span>
+                  <span className="font-extrabold text-brand-700 dark:text-brand-400">
+                    {formatCurrency(order.totalAmount)}
+                  </span>
+                </div>
+              </div>
+            </Link>
+          );
+        })}
+      </div>
+
+      {/* Desktop Full Table View (>= sm) */}
+      <div className="hidden sm:block overflow-x-auto">
         <table className="w-full text-left text-xs">
           <thead className="border-b border-stone-200 bg-stone-50 font-bold uppercase tracking-wider text-stone-500 dark:border-stone-800 dark:bg-stone-800/50 dark:text-stone-400">
             <tr>

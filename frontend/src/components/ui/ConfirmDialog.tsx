@@ -84,18 +84,18 @@ export function ConfirmDialog({
           {description}
         </p>
 
-        <div className="mt-6 flex flex-wrap items-center justify-end gap-3">
+        <div className="mt-6 flex flex-col sm:flex-row sm:items-center sm:justify-end gap-2.5 sm:gap-3">
           <button
             type="button"
             onClick={onCancel}
-            className="touch-target rounded-lg border border-stone-300 px-4 py-2 text-sm font-semibold text-stone-700 hover:bg-stone-100 dark:border-stone-700 dark:text-stone-300 dark:hover:bg-stone-800 transition"
+            className="touch-target w-full sm:w-auto inline-flex items-center justify-center rounded-xl border border-stone-300 px-4 py-2 text-sm font-semibold text-stone-700 hover:bg-stone-100 dark:border-stone-700 dark:text-stone-300 dark:hover:bg-stone-800 transition"
           >
             {cancelLabel}
           </button>
           <button
             type="button"
             onClick={onConfirm}
-            className={`touch-target rounded-lg px-4 py-2 text-sm font-semibold shadow-xs transition ${confirmColors[variant]}`}
+            className={`touch-target w-full sm:w-auto inline-flex items-center justify-center rounded-xl px-4 py-2 text-sm font-semibold shadow-xs transition ${confirmColors[variant]}`}
           >
             {confirmLabel}
           </button>

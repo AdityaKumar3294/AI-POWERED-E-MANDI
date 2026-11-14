@@ -94,18 +94,18 @@ export function OrderCard({
 
         {/* Quantities & Counterparty Row */}
         <div className="mt-4 grid grid-cols-2 gap-2 rounded-xl bg-stone-50 p-2.5 text-xs text-stone-700 dark:bg-stone-800/60 dark:text-stone-300">
-          <div className="flex items-center gap-1.5">
-            <Scale className="h-4 w-4 text-brand-600 dark:text-brand-400" />
-            <span>{t('common.quantity', 'Volume')}:</span>
-            <strong className="text-stone-900 dark:text-stone-100">
+          <div className="flex items-center gap-1.5 min-w-0">
+            <Scale className="h-4 w-4 shrink-0 text-brand-600 dark:text-brand-400" />
+            <span className="shrink-0">{t('common.quantity', 'Volume')}:</span>
+            <strong className="truncate text-stone-900 dark:text-stone-100">
               {formatWeight(order.quantity)}
             </strong>
           </div>
 
-          <div className="flex items-center justify-end gap-1.5">
-            <Coins className="h-4 w-4 text-amber-600 dark:text-amber-400" />
-            <span>{counterpartyPrefix}:</span>
-            <strong className="line-clamp-1 max-w-[100px] text-stone-900 dark:text-stone-100">
+          <div className="flex items-center justify-end gap-1.5 min-w-0">
+            <Coins className="h-4 w-4 shrink-0 text-amber-600 dark:text-amber-400" />
+            <span className="shrink-0">{counterpartyPrefix}:</span>
+            <strong className="truncate max-w-[85px] sm:max-w-[120px] text-stone-900 dark:text-stone-100">
               {counterparty?.name || 'Authorized'}
             </strong>
           </div>
@@ -119,18 +119,18 @@ export function OrderCard({
       </div>
 
       {/* Action Footer */}
-      <div className="mt-5 flex flex-wrap items-center justify-between gap-2 border-t border-stone-100 pt-3 dark:border-stone-800">
+      <div className="mt-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2.5 border-t border-stone-100 pt-3 dark:border-stone-800">
         <button
           type="button"
           onClick={() => onViewDetails(order)}
-          className="inline-flex h-10 items-center gap-1 text-xs font-bold text-stone-700 hover:text-brand-700 dark:text-stone-300 dark:hover:text-brand-400"
+          className="inline-flex h-10 items-center justify-center sm:justify-start gap-1 text-xs font-bold text-stone-700 hover:text-brand-700 dark:text-stone-300 dark:hover:text-brand-400"
         >
           <span>{t('orders.viewDetailsTimeline', 'View Details & Timeline')}</span>
           <ChevronRight className="h-4 w-4" />
         </button>
 
         {/* Quick action triggers */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 w-full sm:w-auto">
           {allowedActions.map((action) => {
             const Icon = actionIcons[action.action];
             const isDanger = action.variant === 'danger';
@@ -141,7 +141,7 @@ export function OrderCard({
                 key={action.action}
                 type="button"
                 onClick={() => onActionSelect(order, action)}
-                className={`inline-flex h-10 items-center gap-1.5 rounded-xl px-3 text-xs font-bold transition-all shadow-xs focus:ring-2 focus:outline-hidden ${
+                className={`flex-1 sm:flex-none inline-flex h-10 items-center justify-center gap-1.5 rounded-xl px-3 text-xs font-bold transition-all shadow-xs focus:ring-2 focus:outline-hidden ${
                   isDanger
                     ? 'border border-red-200 bg-red-50 text-red-700 hover:bg-red-100 focus:ring-red-500/20 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300'
                     : 'bg-brand-700 text-white hover:bg-brand-800 focus:ring-brand-500'

@@ -139,7 +139,7 @@ export default function ProductDetailPage() {
               <span className="block text-xs font-semibold text-brand-700 dark:text-brand-300 uppercase tracking-wider">
                 Wholesale Price
               </span>
-              <PriceText amount={product.pricePerKg} perKg className="text-3xl font-black text-brand-900 dark:text-brand-200" />
+              <PriceText amount={product.pricePerKg} perKg className="text-2xl sm:text-3xl font-black text-brand-900 dark:text-brand-200" />
             </div>
           </div>
 

@@ -51,34 +51,34 @@ export default function LandingPage() {
             <div className="flex flex-col justify-center gap-3 sm:flex-row lg:justify-start">
               <Link
                 to="/register"
-                className="flex h-13 items-center justify-center gap-2 rounded-2xl bg-brand-700 px-6 text-base font-bold text-white shadow-md transition-all hover:bg-brand-800 hover:shadow-lg focus:ring-2 focus:ring-brand-500 focus:outline-hidden"
+                className="flex h-13 w-full sm:w-auto items-center justify-center gap-2 rounded-2xl bg-brand-700 px-6 text-base font-bold text-white shadow-md transition-all hover:bg-brand-800 hover:shadow-lg focus:ring-2 focus:ring-brand-500 focus:outline-hidden"
               >
-                <Sparkles className="h-5 w-5" />
+                <Sparkles className="h-5 w-5 shrink-0" />
                 <span>{t('landing.farmerCta', 'Farmer: Sell Harvest')}</span>
-                <ArrowRight className="h-4 w-4" />
+                <ArrowRight className="h-4 w-4 shrink-0" />
               </Link>
 
               <Link
                 to="/buyer/marketplace"
-                className="flex h-13 items-center justify-center gap-2 rounded-2xl border-2 border-stone-300 bg-white px-6 text-base font-bold text-stone-800 transition-colors hover:border-brand-500 hover:bg-stone-50 hover:text-brand-700 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-stone-800"
+                className="flex h-13 w-full sm:w-auto items-center justify-center gap-2 rounded-2xl border-2 border-stone-300 bg-white px-6 text-base font-bold text-stone-800 transition-colors hover:border-brand-500 hover:bg-stone-50 hover:text-brand-700 dark:border-stone-700 dark:bg-stone-900 dark:text-stone-200 dark:hover:bg-stone-800"
               >
-                <Store className="h-5 w-5" />
+                <Store className="h-5 w-5 shrink-0" />
                 <span>{t('landing.buyerCta', 'Buyer: Browse Lots')}</span>
               </Link>
             </div>
 
             {/* Trust Highlights */}
-            <div className="grid grid-cols-3 gap-2 pt-4 text-xs font-bold text-stone-600 sm:text-sm dark:text-stone-400">
-              <div className="flex items-center justify-center gap-1.5 lg:justify-start">
-                <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-5 gap-y-2.5 pt-4 text-xs font-bold text-stone-600 sm:text-sm dark:text-stone-400">
+              <div className="flex items-center gap-1.5">
+                <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
                 <span>{t('landing.trustZeroMiddlemen', 'Zero Middlemen')}</span>
               </div>
-              <div className="flex items-center justify-center gap-1.5 lg:justify-start">
-                <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+              <div className="flex items-center gap-1.5">
+                <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
                 <span>{t('landing.trustYoloScan', 'YOLO Defect Scan')}</span>
               </div>
-              <div className="flex items-center justify-center gap-1.5 lg:justify-start">
-                <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+              <div className="flex items-center gap-1.5">
+                <CheckCircle2 className="h-4 w-4 text-emerald-600 shrink-0" />
                 <span>{t('landing.trustVerifiableQr', 'Verifiable QR')}</span>
               </div>
             </div>

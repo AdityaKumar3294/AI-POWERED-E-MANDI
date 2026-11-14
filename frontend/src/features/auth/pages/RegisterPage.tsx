@@ -92,7 +92,7 @@ export default function RegisterPage() {
         content="Join AI E-Mandi as a verified farmer or wholesale buyer with transparent computer vision grading."
       />
 
-      <div className="w-full max-w-lg space-y-6 rounded-2xl border border-stone-200 bg-white p-6 shadow-xl sm:p-8 dark:border-stone-800 dark:bg-stone-900">
+      <div className="w-full max-w-lg space-y-6 rounded-2xl border border-stone-200 bg-white p-5 shadow-xl sm:p-8 dark:border-stone-800 dark:bg-stone-900">
         {/* Header */}
         <div className="text-center">
           <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-brand-700 text-white shadow-md">

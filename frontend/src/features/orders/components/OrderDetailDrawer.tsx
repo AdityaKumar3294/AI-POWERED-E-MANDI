@@ -83,7 +83,7 @@ export function OrderDetailDrawer({
       />
 
       {/* Drawer Panel */}
-      <div className="fixed inset-y-0 right-0 flex max-w-full pl-10">
+      <div className="fixed inset-y-0 right-0 flex max-w-full pl-0 sm:pl-10">
         <div className="relative flex w-screen max-w-md flex-col overflow-y-auto bg-white shadow-2xl transition-transform duration-300 dark:bg-stone-900">
           {/* Header */}
           <div className="sticky top-0 z-10 flex items-center justify-between border-b border-stone-200 bg-white/95 px-5 py-4 backdrop-blur-xs dark:border-stone-800 dark:bg-stone-900/95">
