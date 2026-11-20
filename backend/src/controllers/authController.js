@@ -1,9 +1,21 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
+const {
+  createDemoOTP,
+  verifyDemoOTP,
+} = require("../utils/demoOtpStore");
 
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password, role, location } = req.body;
+    const {
+      name,
+      email,
+      password,
+      phone,
+      preferredLanguage,
+      role,
+      location,
+    } = req.body;
 
     // Validate required fields
     if (!name || !email || !password) {
@@ -33,6 +45,8 @@ const registerUser = async (req, res) => {
       name,
       email: email.toLowerCase(),
       password: hashedPassword,
+      phone: phone || null,
+      preferredLanguage: preferredLanguage || "hi",
       role: role || "buyer",
       location: location || "",
     });
@@ -118,6 +132,8 @@ const loginUser = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        phone: user.phone,
+        preferredLanguage: user.preferredLanguage,
         role: user.role,
         location: user.location,
       },
@@ -131,6 +147,7 @@ const loginUser = async (req, res) => {
     });
   }
 };
+
 const getMe = async (req, res) => {
   try {
     const user = await User.findById(req.user.userId).select("-password");
@@ -148,6 +165,8 @@ const getMe = async (req, res) => {
         id: user._id,
         name: user.name,
         email: user.email,
+        phone: user.phone,
+        preferredLanguage: user.preferredLanguage,
         role: user.role,
         location: user.location,
       },
@@ -162,8 +181,97 @@ const getMe = async (req, res) => {
   }
 };
 
+const requestDemoOTP = async (req, res) => {
+  try {
+    if (
+      process.env.NODE_ENV !== "development" ||
+      process.env.DEMO_OTP_ENABLED !== "true"
+    ) {
+      return res.status(403).json({
+        success: false,
+        message: "Demo OTP is disabled",
+      });
+    }
+
+    const { phone } = req.body;
+
+    if (!phone || !/^\+?[1-9]\d{7,14}$/.test(phone)) {
+      return res.status(400).json({
+        success: false,
+        message: "Enter a valid phone number with country code",
+      });
+    }
+
+    const otp = createDemoOTP(phone);
+
+    // Development demo only: never expose OTP in production.
+    return res.status(200).json({
+      success: true,
+      message: "Demo OTP generated. No SMS was sent.",
+      demo: true,
+      otp,
+      expiresInSeconds: 300,
+    });
+  } catch (error) {
+    console.error("Demo OTP request error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Unable to generate demo OTP",
+    });
+  }
+};
+
+
+const verifyDemoOTPController = async (req, res) => {
+  try {
+    if (
+      process.env.NODE_ENV !== "development" ||
+      process.env.DEMO_OTP_ENABLED !== "true"
+    ) {
+      return res.status(403).json({
+        success: false,
+        message: "Demo OTP is disabled",
+      });
+    }
+
+    const { phone, otp } = req.body;
+
+    if (!phone || !/^\+?[1-9]\d{7,14}$/.test(phone) ||
+        !/^\d{6}$/.test(String(otp || ""))) {
+      return res.status(400).json({
+        success: false,
+        message: "Valid phone number and six-digit OTP are required",
+      });
+    }
+
+    const result = verifyDemoOTP(phone, String(otp));
+
+    if (!result.success) {
+      return res.status(400).json(result);
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Demo OTP verified. This does not verify real phone ownership.",
+      demo: true,
+    });
+  } catch (error) {
+    console.error("Demo OTP verification error:", error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Unable to verify demo OTP",
+    });
+  }
+};
+
+
+
 module.exports = {
   registerUser,
   loginUser,
   getMe,
+  requestDemoOTP,
+  verifyDemoOTPController,
 };

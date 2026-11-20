@@ -1,3 +1,4 @@
+
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema(
@@ -20,6 +21,18 @@ const userSchema = new mongoose.Schema(
       type: String,
       required: true,
       minlength: 6,
+    },
+
+    phone: {
+      type: String,
+      trim: true,
+      default: null,
+    },
+
+    preferredLanguage: {
+      type: String,
+      enum: ["hi", "en", "pa", "mr", "bn", "gu", "ta", "te"],
+      default: "hi",
     },
 
     role: {
